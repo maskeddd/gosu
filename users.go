@@ -1,6 +1,7 @@
 package gosu
 
 import (
+	"github.com/mitchellh/mapstructure"
 	"reflect"
 	"strconv"
 	"strings"
@@ -223,6 +224,18 @@ type UserExtended struct {
 	Statistics               UserStatistics              `json:"statistics"`
 	SupportLevel             int                         `json:"support_level"`
 	UserAchievements         []UserAchievement           `json:"user_achievements"`
+}
+
+type Medal struct {
+	Description  string   `json:"description"`
+	Grouping     string   `json:"grouping"`
+	IconURL      string   `json:"icon_url"`
+	Instructions string   `json:"instructions"`
+	MedalID      uint32   `json:"id"`
+	Mode         *Ruleset `json:"mode"`
+	Name         string   `json:"name"`
+	Ordering     uint32   `json:"ordering"`
+	Slug         string   `json:"slug"`
 }
 
 type UserScore struct {
@@ -489,8 +502,8 @@ func (r *GetUserMostPlayedRequest) SetOffset(offset int) *GetUserMostPlayedReque
 	return r
 }
 
-func (r *GetUserMostPlayedRequest) Build() (*[]BeatmapPlaycount, error) {
-	req := r.client.httpClient.R().SetResult(&[]BeatmapPlaycount{})
+func (r *GetUserMostPlayedRequest) Build() (*[]GetUserMostPlayedResponse, error) {
+	req := r.client.httpClient.R().SetResult(&[]GetUserMostPlayedResponse{})
 
 	req.SetPathParams(map[string]string{
 		"user": strconv.Itoa(r.User),
@@ -510,7 +523,7 @@ func (r *GetUserMostPlayedRequest) Build() (*[]BeatmapPlaycount, error) {
 		return nil, err
 	}
 
-	return resp.Result().(*[]BeatmapPlaycount), nil
+	return resp.Result().(*[]GetUserMostPlayedResponse), nil
 }
 
 type GetUserRecentActivityRequest struct {
@@ -535,7 +548,7 @@ func (r *GetUserRecentActivityRequest) SetOffset(offset int) *GetUserRecentActiv
 }
 
 func (r *GetUserRecentActivityRequest) Build() (*[]EventBase, error) {
-	req := r.client.httpClient.R().SetResult(&[]EventBase{})
+	req := r.client.httpClient.R().SetResult(&[]map[string]interface{}{})
 
 	req.SetPathParam("user", strconv.Itoa(r.User))
 
@@ -552,12 +565,26 @@ func (r *GetUserRecentActivityRequest) Build() (*[]EventBase, error) {
 		return nil, err
 	}
 
-	event := resp.Result().(*[]EventBase)
-	switch event {
+	event := resp.Result().(*[]map[string]interface{})
 
+	var result []EventBase
+	config := &mapstructure.DecoderConfig{
+		DecodeHook: mapstructure.StringToTimeHookFunc(time.RFC3339),
+		Result:     &result,
+		TagName:    "json",
 	}
 
-	return nil, nil
+	decoder, err := mapstructure.NewDecoder(config)
+	if err != nil {
+		return nil, err
+	}
+
+	err = decoder.Decode(*event)
+	if err != nil {
+		return nil, err
+	}
+
+	return &result, nil
 }
 
 type UserKey string
