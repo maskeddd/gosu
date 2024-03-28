@@ -92,7 +92,7 @@ type GetBeatmapResponse struct {
 	MaxCombo  int       `json:"max_combo"`
 }
 
-type BeatmapPlaycount struct {
+type GetUserMostPlayedResponse struct {
 	BeatmapID  int                `json:"beatmap_id"`
 	Beatmap    *BeatmapCompact    `json:"beatmap"`
 	Beatmapset *BeatmapsetCompact `json:"beatmapset"`
