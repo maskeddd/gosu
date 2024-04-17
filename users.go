@@ -414,13 +414,13 @@ func (c *Client) GetUserBeatmapsets(user int) *GetUserBeatmapsetsRequest {
 
 func (r *GetUserBeatmapsetsRequest) SetStatus(mapType RankStatus) *GetUserBeatmapsetsRequest {
 	switch mapType {
-	case Approved, Ranked:
+	case RankStatusApproved, RankStatusRanked:
 		r.MapType = "ranked"
-	case Graveyard:
+	case RankStatusGraveyard:
 		r.MapType = "graveyard"
-	case Pending, WIP, Qualified:
+	case RankStatusPending, RankStatusWIP, RankStatusQualified:
 		r.MapType = "pending"
-	case Loved:
+	case RankStatusLoved:
 		r.MapType = "loved"
 	}
 	return r

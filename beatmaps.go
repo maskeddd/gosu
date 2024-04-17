@@ -177,7 +177,7 @@ func (r *GetUserBeatmapScoreRequest) Build() (*UserBeatmapScore, error) {
 	})
 
 	if r.Mode != nil {
-		req.SetQueryParam("mode", string(*r.Mode))
+		req.SetQueryParam("mode", r.Mode.String())
 	}
 
 	resp, err := req.Get("/beatmaps/{beatmap}/scores/users/{user}")
@@ -215,7 +215,7 @@ func (r *GetUserBeatmapScoresRequest) Build() (*UserBeatmapScores, error) {
 	})
 
 	if r.Mode != nil {
-		req.SetQueryParam("mode", string(*r.Mode))
+		req.SetQueryParam("mode", r.Mode.String())
 	}
 
 	resp, err := req.Get("/beatmaps/{beatmap}/scores/users/{user}/all")
@@ -251,7 +251,7 @@ func (r *GetBeatmapScoresRequest) Build() (*BeatmapScores, error) {
 	})
 
 	if r.Mode != nil {
-		req.SetQueryParam("mode", string(*r.Mode))
+		req.SetQueryParam("mode", r.Mode.String())
 	}
 
 	resp, err := req.Get("/beatmaps/{beatmap}/scores")

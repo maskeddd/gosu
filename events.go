@@ -5,19 +5,19 @@ import "time"
 type EventType string
 
 const (
-	Achievement       EventType = "achievement"
-	BeatmapPlaycount  EventType = "beatmapPlaycount"
-	BeatmapsetApprove EventType = "beatmapsetApprove"
-	BeatmapsetDelete  EventType = "beatmapsetDelete"
-	BeatmapsetRevive  EventType = "beatmapsetRevive"
-	BeatmapsetUpdate  EventType = "beatmapsetUpdate"
-	BeatmapsetUpload  EventType = "beatmapsetUpload"
-	Rank              EventType = "rank"
-	RankLost          EventType = "rankLost"
-	UserSupportAgain  EventType = "userSupportAgain"
-	UserSupportFirst  EventType = "userSupportFirst"
-	UserSupportGift   EventType = "userSupportGift"
-	UsernameChange    EventType = "usernameChange"
+	EventTypeAchievement       EventType = "achievement"
+	EventTypeBeatmapPlaycount  EventType = "beatmapPlaycount"
+	EventTypeBeatmapsetApprove EventType = "beatmapsetApprove"
+	EventTypeBeatmapsetDelete  EventType = "beatmapsetDelete"
+	EventTypeBeatmapsetRevive  EventType = "beatmapsetRevive"
+	EventTypeBeatmapsetUpdate  EventType = "beatmapsetUpdate"
+	EventTypeBeatmapsetUpload  EventType = "beatmapsetUpload"
+	EventTypeRank              EventType = "rank"
+	EventTypeRankLost          EventType = "rankLost"
+	EventTypeUserSupportAgain  EventType = "userSupportAgain"
+	EventTypeUserSupportFirst  EventType = "userSupportFirst"
+	EventTypeUserSupportGift   EventType = "userSupportGift"
+	EventTypeUsernameChange    EventType = "usernameChange"
 )
 
 type EventBase struct {

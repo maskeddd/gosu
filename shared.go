@@ -1,13 +1,10 @@
 package gosu
 
-type Ruleset string
+// ENUM(osu, taiko, fruits, mania)
+type Ruleset int
 
-const (
-	Fruits Ruleset = "fruits"
-	Mania  Ruleset = "mania"
-	Osu    Ruleset = "osu"
-	Taiko  Ruleset = "taiko"
-)
+// ENUM(graveyard = -2, WIP, pending, ranked, approved, qualified, loved)
+type RankStatus int
 
 type Grade string
 
@@ -22,3 +19,5 @@ const (
 	D   Grade = "D"
 	F   Grade = "F"
 )
+
+type Cursor map[string]interface{}
