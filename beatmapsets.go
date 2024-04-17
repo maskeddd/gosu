@@ -2,19 +2,60 @@ package gosu
 
 import (
 	"strconv"
+	"strings"
 	"time"
 )
 
-type RankStatus int
+type Genre int
 
 const (
-	Graveyard RankStatus = iota - 2
-	WIP
-	Pending
-	Ranked
-	Approved
-	Qualified
-	Loved
+	GenreAny Genre = iota
+	GenreUnspecified
+	GenreVideoGame
+	GenreAnime
+	GenreRock
+	GenrePop
+	GenreOther
+	GenreNovelty
+	GenreHipHop Genre = iota + 1
+	GenreElectronic
+	GenreMetal
+	GenreClassical
+	GenreFolk
+	GenreJazz
+)
+
+type Language int
+
+const (
+	LanguageAny Language = iota
+	LanguageOther
+	LanguageEnglish
+	LanguageJapanese
+	LanguageChinese
+	LanguageInstrumental
+	LanguageKorean
+	LanguageFrench
+	LanguageGerman
+	LanguageSwedish
+	LanguageSpanish
+	LanguageItalian
+	LanguageRussian
+	LanguagePolish
+	LanguageUnspecified
+)
+
+type BeatmapsetSearchSort string
+
+const (
+	SortArtist     BeatmapsetSearchSort = "artist"
+	SortFavourites                      = "favourites"
+	SortPlaycount                       = "plays"
+	SortRankedDate                      = "ranked"
+	SortRating                          = "rating"
+	SortRelevance                       = "relevance" // No change for default value
+	SortStars                           = "stars"     // Restored original name
+	SortTitle                           = "title"
 )
 
 type BeatmapsetCompact struct {
@@ -50,7 +91,7 @@ type Beatmapset struct {
 	LastUpdated        time.Time              `json:"last_updated"`
 	LegacyThreadURL    *string                `json:"legacy_thread_url"`
 	NominationsSummary BeatmapsetNominations  `json:"nominations_summary"`
-	Ranked             RankStatus             `json:"ranked"`
+	Ranked             int                    `json:"ranked"`
 	RankedDate         *time.Time             `json:"ranked_date"`
 	Storyboard         bool                   `json:"storyboard"`
 	SubmittedDate      *time.Time             `json:"submitted_date"`
@@ -99,6 +140,20 @@ type BeatmapsetLanguage struct {
 	Name string `json:"name"`
 }
 
+type BeatmapsetSearchResponse struct {
+	Cursor      *Cursor `json:"cursor"`
+	Beatmapsets []struct {
+		Beatmapset
+		Beatmaps []struct {
+			Beatmap
+			Checksum string `json:"checksum"`
+			MaxCombo int    `json:"max_combo"`
+		} `json:"beatmaps"`
+		PackTags []string `json:"pack_tags"`
+	} `json:"beatmapsets"`
+	Total int `json:"total"`
+}
+
 type LookupBeatmapsetResponse struct {
 	Beatmapset
 	Beatmaps []struct {
@@ -125,16 +180,16 @@ type LookupBeatmapsetResponse struct {
 	User               UserCompact   `json:"user"`
 }
 
-type LookupBeatmapsetRequest struct {
+type GetBeatmapIDRequest struct {
 	client       *Client
 	BeatmapsetID int
 }
 
-func (c *Client) GetBeatmapsetFromID(beatmapsetID int) *LookupBeatmapsetRequest {
-	return &LookupBeatmapsetRequest{client: c, BeatmapsetID: beatmapsetID}
+func (c *Client) GetBeatmapsetID(beatmapsetID int) *GetBeatmapIDRequest {
+	return &GetBeatmapIDRequest{client: c, BeatmapsetID: beatmapsetID}
 }
 
-func (r *LookupBeatmapsetRequest) Build() (*LookupBeatmapsetResponse, error) {
+func (r *GetBeatmapIDRequest) Build() (*LookupBeatmapsetResponse, error) {
 	req := r.client.httpClient.R().SetResult(&LookupBeatmapsetResponse{})
 	req.SetQueryParam("beatmap_id", strconv.Itoa(r.BeatmapsetID))
 
@@ -145,21 +200,156 @@ func (r *LookupBeatmapsetRequest) Build() (*LookupBeatmapsetResponse, error) {
 	return resp.Result().(*LookupBeatmapsetResponse), nil
 }
 
-//type SearchRankStatus struct {
-//	Any      bool
-//	Specific RankStatus
-//}
-//
-//type BeatmapsetSearchRequest struct {
-//	client     *Client
-//	Query      *string
-//	Mode       *int
-//	Status     *SearchRankStatus
-//	Genre      *int
-//	Language   *int
-//	Video      bool
-//	Storyboard bool
-//	NSFW       bool
-//	Descending bool
-//	Cursor     *int
-//}
+type searchRankStatus struct {
+	Any      bool
+	Specific *RankStatus
+}
+
+type GetBeatmapsetSearchRequest struct {
+	client     *Client
+	Query      *string
+	Mode       *Ruleset
+	status     *searchRankStatus
+	Genre      *Genre
+	Language   *Language
+	Video      bool
+	Storyboard bool
+	NSFW       bool
+	Sort       *BeatmapsetSearchSort
+	Descending bool
+	Cursor     *Cursor
+}
+
+func (c *Client) GetBeatmapsetSearch() *GetBeatmapsetSearchRequest {
+	return &GetBeatmapsetSearchRequest{client: c}
+}
+
+func (r *GetBeatmapsetSearchRequest) SetQuery(query string) *GetBeatmapsetSearchRequest {
+	r.Query = &query
+	return r
+}
+
+func (r *GetBeatmapsetSearchRequest) SetMode(mode Ruleset) *GetBeatmapsetSearchRequest {
+	r.Mode = &mode
+	return r
+}
+
+func (r *GetBeatmapsetSearchRequest) AnyStatus() *GetBeatmapsetSearchRequest {
+	r.status = &searchRankStatus{Any: true}
+	return r
+}
+
+func (r *GetBeatmapsetSearchRequest) SetStatus(status RankStatus) *GetBeatmapsetSearchRequest {
+	if status == RankStatusRanked {
+		temp := RankStatusPending
+		r.status = &searchRankStatus{Any: false, Specific: &temp}
+	} else {
+		r.status = &searchRankStatus{Any: false, Specific: &status}
+	}
+	return r
+}
+
+func (r *GetBeatmapsetSearchRequest) SetGenre(genre Genre) *GetBeatmapsetSearchRequest {
+	r.Genre = &genre
+	return r
+}
+
+func (r *GetBeatmapsetSearchRequest) SetLanguage(language Language) *GetBeatmapsetSearchRequest {
+	r.Language = &language
+	return r
+}
+
+func (r *GetBeatmapsetSearchRequest) SetVideo(video bool) *GetBeatmapsetSearchRequest {
+	r.Video = video
+	return r
+}
+
+func (r *GetBeatmapsetSearchRequest) SetStoryboard(storyboard bool) *GetBeatmapsetSearchRequest {
+	r.Storyboard = storyboard
+	return r
+}
+
+func (r *GetBeatmapsetSearchRequest) SetNSFW(nsfw bool) *GetBeatmapsetSearchRequest {
+	r.NSFW = nsfw
+	return r
+}
+
+func (r *GetBeatmapsetSearchRequest) SortBy(sort BeatmapsetSearchSort, descending bool) *GetBeatmapsetSearchRequest {
+	r.Sort = &sort
+	r.Descending = descending
+	return r
+}
+
+func (r *GetBeatmapsetSearchRequest) SetCursor(cursor *Cursor) *GetBeatmapsetSearchRequest {
+	r.Cursor = cursor
+	return r
+}
+
+func (r *GetBeatmapsetSearchRequest) Build() (*BeatmapsetSearchResponse, error) {
+	req := r.client.httpClient.R().SetResult(&BeatmapsetSearchResponse{})
+
+	if r.Query != nil {
+		req.SetQueryParam("q", *r.Query)
+	}
+
+	if r.Mode != nil {
+		req.SetQueryParam("m", strconv.Itoa(int(*r.Mode)))
+	}
+
+	if r.status != nil {
+		if r.status.Any {
+			req.SetQueryParam("s", "any")
+		} else if r.status.Specific != nil {
+			req.SetQueryParam("s", strings.ToLower(r.status.Specific.String()))
+		}
+	}
+
+	if r.Genre != nil {
+		req.SetQueryParam("g", strconv.Itoa(int(*r.Genre)))
+	}
+
+	if r.Language != nil {
+		req.SetQueryParam("l", strconv.Itoa(int(*r.Language)))
+	}
+
+	var extra string
+	switch {
+	case !r.Video && r.Storyboard:
+		extra = "storyboard"
+	case r.Video && !r.Storyboard:
+		extra = "video"
+	case r.Video && r.Storyboard:
+		extra = "storyboard.video"
+	default:
+		extra = ""
+	}
+
+	if extra != "" {
+		req.SetQueryParam("e", extra)
+	}
+
+	req.SetQueryParam("nsfw", strconv.FormatBool(r.NSFW))
+
+	if r.Sort != nil {
+		var sort strings.Builder
+		sort.WriteString(string(*r.Sort))
+
+		if r.Descending {
+			sort.WriteString("_desc")
+		} else {
+			sort.WriteString("_asc")
+		}
+
+		req.SetQueryParam("sort", sort.String())
+	}
+
+	resp, err := req.Get("/beatmapsets/search")
+	if err != nil {
+		return nil, err
+	}
+
+	println(resp.String())
+	println(resp.Request.URL)
+
+	return resp.Result().(*BeatmapsetSearchResponse), nil
+}
