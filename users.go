@@ -589,18 +589,10 @@ func (r *GetUserRecentActivityRequest) Build() (*[]EventBase, error) {
 	return &result, nil
 }
 
-type UserKey string
-
-const (
-	Username UserKey = "username"
-	ID       UserKey = "id"
-)
-
 type GetUserRequest struct {
 	client *Client
 	User   string
 	Mode   *Ruleset
-	Key    *UserKey
 }
 
 func (c *Client) GetUser(user string) *GetUserRequest {
@@ -609,11 +601,6 @@ func (c *Client) GetUser(user string) *GetUserRequest {
 
 func (r *GetUserRequest) SetMode(mode Ruleset) *GetUserRequest {
 	r.Mode = &mode
-	return r
-}
-
-func (r *GetUserRequest) SetKey(key UserKey) *GetUserRequest {
-	r.Key = &key
 	return r
 }
 
@@ -627,13 +614,8 @@ func (r *GetUserRequest) Build() (*UserExtended, error) {
 		url.WriteString("/" + r.Mode.String())
 	}
 
-	if r.Key != nil {
-		println("hello!")
-	}
-
 	resp, err := req.Get(url.String())
 	if err != nil {
-		println()
 		return nil, err
 	}
 
