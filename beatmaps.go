@@ -99,57 +99,6 @@ type GetUserMostPlayedResponse struct {
 	Count      int                `json:"count"`
 }
 
-type LookupBeatmapRequest struct {
-	client   *Client
-	Checksum *string
-	Filename *string
-	ID       *int
-}
-
-// LookupBeatmap returns beatmap.
-// https://osu.ppy.sh/docs/index.html#beatmaps
-func (c *Client) LookupBeatmap() *LookupBeatmapRequest {
-	return &LookupBeatmapRequest{client: c}
-}
-
-func (r *LookupBeatmapRequest) SetChecksum(checksum string) *LookupBeatmapRequest {
-	r.Checksum = &checksum
-	return r
-}
-
-func (r *LookupBeatmapRequest) SetFilename(filename string) *LookupBeatmapRequest {
-	r.Filename = &filename
-	return r
-}
-
-func (r *LookupBeatmapRequest) SetID(id int) *LookupBeatmapRequest {
-	r.ID = &id
-	return r
-}
-
-func (r *LookupBeatmapRequest) Build() (*GetBeatmapResponse, error) {
-	req := r.client.httpClient.R().SetResult(&GetBeatmapResponse{})
-
-	if r.Checksum != nil {
-		req.SetQueryParam("checksum", *r.Checksum)
-	}
-
-	if r.Filename != nil {
-		req.SetQueryParam("filename", *r.Filename)
-	}
-
-	if r.ID != nil {
-		req.SetQueryParam("id", strconv.Itoa(*r.ID))
-	}
-
-	resp, err := req.Get("beatmaps/lookup")
-	if err != nil {
-		return nil, err
-	}
-
-	return resp.Result().(*GetBeatmapResponse), nil
-}
-
 type GetUserBeatmapScoreRequest struct {
 	client  *Client
 	Beatmap int
@@ -259,8 +208,6 @@ func (r *GetBeatmapScoresRequest) Build() (*BeatmapScores, error) {
 		return nil, err
 	}
 
-	println(resp.String())
-
 	return resp.Result().(*BeatmapScores), nil
 }
 
@@ -307,6 +254,57 @@ func (r *GetBeatmapRequest) Build() (*GetBeatmapResponse, error) {
 	req.SetPathParam("id", strconv.Itoa(r.Beatmap))
 
 	resp, err := req.Get("beatmaps/{id}")
+	if err != nil {
+		return nil, err
+	}
+
+	return resp.Result().(*GetBeatmapResponse), nil
+}
+
+type GetBeatmapLookupRequest struct {
+	client   *Client
+	Checksum *string
+	Filename *string
+	ID       *int
+}
+
+// GetBeatmapLookup returns beatmap.
+// https://osu.ppy.sh/docs/index.html#beatmaps
+func (c *Client) GetBeatmapLookup() *GetBeatmapLookupRequest {
+	return &GetBeatmapLookupRequest{client: c}
+}
+
+func (r *GetBeatmapLookupRequest) SetChecksum(checksum string) *GetBeatmapLookupRequest {
+	r.Checksum = &checksum
+	return r
+}
+
+func (r *GetBeatmapLookupRequest) SetFilename(filename string) *GetBeatmapLookupRequest {
+	r.Filename = &filename
+	return r
+}
+
+func (r *GetBeatmapLookupRequest) SetID(id int) *GetBeatmapLookupRequest {
+	r.ID = &id
+	return r
+}
+
+func (r *GetBeatmapLookupRequest) Build() (*GetBeatmapResponse, error) {
+	req := r.client.httpClient.R().SetResult(&GetBeatmapResponse{})
+
+	if r.Checksum != nil {
+		req.SetQueryParam("checksum", *r.Checksum)
+	}
+
+	if r.Filename != nil {
+		req.SetQueryParam("filename", *r.Filename)
+	}
+
+	if r.ID != nil {
+		req.SetQueryParam("id", strconv.Itoa(*r.ID))
+	}
+
+	resp, err := req.Get("beatmaps/lookup")
 	if err != nil {
 		return nil, err
 	}
