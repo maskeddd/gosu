@@ -1,49 +1,51 @@
 package gosu
 
 import (
-	"github.com/mitchellh/mapstructure"
 	"reflect"
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/mitchellh/mapstructure"
 )
 
 type Playstyle string
 
 const (
-	Mouse    Playstyle = "mouse"
-	Keyboard Playstyle = "keyboard"
-	Tablet   Playstyle = "tablet"
-	Touch    Playstyle = "touch"
+	PlaystyleMouse    Playstyle = "mouse"
+	PlaystyleKeyboard Playstyle = "keyboard"
+	PlaystyleTablet   Playstyle = "tablet"
+	PlaystyleTouch    Playstyle = "touch"
 )
 
-type ProfilePageSection string
+type ProfilePage string
 
 const (
-	Me             ProfilePageSection = "me"
-	RecentActivity ProfilePageSection = "recent_activity"
-	Beatmaps       ProfilePageSection = "beatmaps"
-	Historical     ProfilePageSection = "historical"
-	Kudosu         ProfilePageSection = "kudosu"
-	TopRanks       ProfilePageSection = "top_ranks"
-	Medals         ProfilePageSection = "medals"
+	ProfilePageMe             ProfilePage = "me"
+	ProfilePageRecentActivity ProfilePage = "recent_activity"
+	ProfilePageBeatmaps       ProfilePage = "beatmaps"
+	ProfilePageHistorical     ProfilePage = "historical"
+	ProfilePageKudosu         ProfilePage = "kudosu"
+	ProfilePageTopRanks       ProfilePage = "top_ranks"
+	ProfilePageMedals         ProfilePage = "medals"
 )
 
-type UserAccountHistoryType string
+type HistoryType string
 
 const (
-	Note        UserAccountHistoryType = "note"
-	Restriction UserAccountHistoryType = "restriction"
-	Silence     UserAccountHistoryType = "silence"
+	HistoryTypeNote          HistoryType = "note"
+	HistoryTypeRestriction   HistoryType = "restriction"
+	HistoryTypeSilence       HistoryType = "silence"
+	HistoryTypeTournamentBan HistoryType = "tournament_ban"
 )
 
 type ScoreType string
 
 const (
-	Best   ScoreType = "best"
-	Firsts ScoreType = "firsts"
-	Pinned ScoreType = "pinned"
-	Recent ScoreType = "recent"
+	ScoreTypeBest   ScoreType = "best"
+	ScoreTypeFirsts ScoreType = "firsts"
+	ScoreTypePinned ScoreType = "pinned"
+	ScoreTypeRecent ScoreType = "recent"
 )
 
 type UserCompact struct {
@@ -80,34 +82,34 @@ type UserKudosu struct {
 
 type User struct {
 	UserCompact
-	Country      Country              `json:"country"`
-	Cover        Cover                `json:"cover"`
-	Discord      *string              `json:"discord"`
-	HasSupported bool                 `json:"has_supported"`
-	Interests    *string              `json:"interests"`
-	JoinDate     time.Time            `json:"join_date"`
-	Kudosu       UserKudosu           `json:"kudosu"`
-	Location     string               `json:"location"`
-	MaxBlocks    int                  `json:"max_blocks"`
-	MaxFriends   int                  `json:"max_friends"`
-	Occupation   *string              `json:"occupation"`
-	Playmode     Ruleset              `json:"playmode"`
-	Playstyle    []Playstyle          `json:"playstyle"`
-	PostCount    int                  `json:"post_count"`
-	ProfileOrder []ProfilePageSection `json:"profile_order"`
-	Title        *string              `json:"title"`
-	TitleURL     *string              `json:"title_url"`
-	Twitter      *string              `json:"twitter"`
-	Website      *string              `json:"website"`
+	Country      Country       `json:"country"`
+	Cover        Cover         `json:"cover"`
+	Discord      *string       `json:"discord"`
+	HasSupported bool          `json:"has_supported"`
+	Interests    *string       `json:"interests"`
+	JoinDate     time.Time     `json:"join_date"`
+	Kudosu       UserKudosu    `json:"kudosu"`
+	Location     string        `json:"location"`
+	MaxBlocks    int           `json:"max_blocks"`
+	MaxFriends   int           `json:"max_friends"`
+	Occupation   *string       `json:"occupation"`
+	Playmode     Ruleset       `json:"playmode"`
+	Playstyle    []Playstyle   `json:"playstyle"`
+	PostCount    int           `json:"post_count"`
+	ProfileOrder []ProfilePage `json:"profile_order"`
+	Title        *string       `json:"title"`
+	TitleURL     *string       `json:"title_url"`
+	Twitter      *string       `json:"twitter"`
+	Website      *string       `json:"website"`
 }
 
 type UserAccountHistory struct {
-	Description string                 `json:"description"`
-	ID          int                    `json:"id"`
-	Length      int                    `json:"length"`
-	Permanent   bool                   `json:"permanent"`
-	Timestamp   string                 `json:"timestamp"`
-	Type        UserAccountHistoryType `json:"type"`
+	Description string      `json:"description"`
+	ID          int         `json:"id"`
+	Length      int         `json:"length"`
+	Permanent   bool        `json:"permanent"`
+	Timestamp   string      `json:"timestamp"`
+	Type        HistoryType `json:"type"`
 }
 
 type UserActiveTournamentBanner struct {
@@ -326,22 +328,22 @@ func (c *Client) GetUserScores(user int) *GetUserScoresRequest {
 }
 
 func (r *GetUserScoresRequest) Best() *GetUserScoresRequest {
-	r.Type = Best
+	r.Type = ScoreTypeBest
 	return r
 }
 
 func (r *GetUserScoresRequest) Firsts() *GetUserScoresRequest {
-	r.Type = Firsts
+	r.Type = ScoreTypeFirsts
 	return r
 }
 
 func (r *GetUserScoresRequest) Pinned() *GetUserScoresRequest {
-	r.Type = Pinned
+	r.Type = ScoreTypePinned
 	return r
 }
 
 func (r *GetUserScoresRequest) Recent() *GetUserScoresRequest {
-	r.Type = Recent
+	r.Type = ScoreTypeRecent
 	return r
 }
 
