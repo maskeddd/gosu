@@ -193,7 +193,7 @@ func (r *GetBeatmapIDRequest) Build() (*LookupBeatmapsetResponse, error) {
 	req := r.client.httpClient.R().SetResult(&LookupBeatmapsetResponse{})
 	req.SetQueryParam("beatmap_id", strconv.Itoa(r.BeatmapsetID))
 
-	resp, err := req.Get("/beatmapsets/lookup")
+	resp, err := req.Get("beatmapsets/lookup")
 	if err != nil {
 		return nil, err
 	}
@@ -293,7 +293,7 @@ func (r *GetBeatmapsetSearchRequest) Build() (*BeatmapsetSearchResponse, error) 
 	}
 
 	if r.Mode != nil {
-		req.SetQueryParam("m", strconv.Itoa(int(*r.Mode)))
+		req.SetQueryParam("m", r.Mode.String())
 	}
 
 	if r.status != nil {
@@ -343,13 +343,10 @@ func (r *GetBeatmapsetSearchRequest) Build() (*BeatmapsetSearchResponse, error) 
 		req.SetQueryParam("sort", sort.String())
 	}
 
-	resp, err := req.Get("/beatmapsets/search")
+	resp, err := req.Get("beatmapsets/search")
 	if err != nil {
 		return nil, err
 	}
-
-	println(resp.String())
-	println(resp.Request.URL)
 
 	return resp.Result().(*BeatmapsetSearchResponse), nil
 }

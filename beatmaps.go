@@ -142,7 +142,7 @@ func (r *LookupBeatmapRequest) Build() (*GetBeatmapResponse, error) {
 		req.SetQueryParam("id", strconv.Itoa(*r.ID))
 	}
 
-	resp, err := req.Get("/beatmaps/lookup")
+	resp, err := req.Get("beatmaps/lookup")
 	if err != nil {
 		return nil, err
 	}
@@ -180,7 +180,7 @@ func (r *GetUserBeatmapScoreRequest) Build() (*UserBeatmapScore, error) {
 		req.SetQueryParam("mode", r.Mode.String())
 	}
 
-	resp, err := req.Get("/beatmaps/{beatmap}/scores/users/{user}")
+	resp, err := req.Get("beatmaps/{beatmap}/scores/users/{user}")
 	if err != nil {
 		return nil, err
 	}
@@ -218,7 +218,7 @@ func (r *GetUserBeatmapScoresRequest) Build() (*UserBeatmapScores, error) {
 		req.SetQueryParam("mode", r.Mode.String())
 	}
 
-	resp, err := req.Get("/beatmaps/{beatmap}/scores/users/{user}/all")
+	resp, err := req.Get("beatmaps/{beatmap}/scores/users/{user}/all")
 	if err != nil {
 		return nil, err
 	}
@@ -254,7 +254,7 @@ func (r *GetBeatmapScoresRequest) Build() (*BeatmapScores, error) {
 		req.SetQueryParam("mode", r.Mode.String())
 	}
 
-	resp, err := req.Get("/beatmaps/{beatmap}/scores")
+	resp, err := req.Get("beatmaps/{beatmap}/scores")
 	if err != nil {
 		return nil, err
 	}
@@ -282,7 +282,7 @@ func (r *GetBeatmapsRequest) Build() (*GetBeatmapsResponse, error) {
 		req.QueryParam.Add("ids[]", strconv.Itoa(id))
 	}
 
-	resp, err := req.Get("/beatmaps")
+	resp, err := req.Get("beatmaps")
 	if err != nil {
 		return nil, err
 	}
@@ -306,7 +306,7 @@ func (r *GetBeatmapRequest) Build() (*GetBeatmapResponse, error) {
 
 	req.SetPathParam("id", strconv.Itoa(r.Beatmap))
 
-	resp, err := req.Get("/beatmaps/{id}")
+	resp, err := req.Get("beatmaps/{id}")
 	if err != nil {
 		return nil, err
 	}

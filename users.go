@@ -305,7 +305,7 @@ func (r *GetUserKudosuRequest) Build() (*[]KudosuHistory, error) {
 		req.SetQueryParam("offset", strconv.Itoa(*r.Offset))
 	}
 
-	resp, err := req.Get("/users/{user}/kudosu")
+	resp, err := req.Get("users/{user}/kudosu")
 	if err != nil {
 		return nil, err
 	}
@@ -394,7 +394,7 @@ func (r *GetUserScoresRequest) Build() (*[]UserScore, error) {
 		req.SetQueryParam("offset", strconv.Itoa(*r.Offset))
 	}
 
-	resp, err := req.Get("/users/{user}/scores/{type}")
+	resp, err := req.Get("users/{user}/scores/{type}")
 	if err != nil {
 		return nil, err
 	}
@@ -474,7 +474,7 @@ func (r *GetUserBeatmapsetsRequest) Build() (*[]UserBeatmapset, error) {
 		req.SetQueryParam("offset", strconv.Itoa(*r.Offset))
 	}
 
-	resp, err := req.Get("/users/{user}/beatmapsets/{type}")
+	resp, err := req.Get("users/{user}/beatmapsets/{type}")
 	if err != nil {
 		return nil, err
 	}
@@ -520,7 +520,7 @@ func (r *GetUserMostPlayedRequest) Build() (*[]GetUserMostPlayedResponse, error)
 		req.SetQueryParam("offset", strconv.Itoa(*r.Offset))
 	}
 
-	resp, err := req.Get("/users/{user}/beatmapsets/{type}")
+	resp, err := req.Get("users/{user}/beatmapsets/{type}")
 	if err != nil {
 		return nil, err
 	}
@@ -562,7 +562,7 @@ func (r *GetUserRecentActivityRequest) Build() (*[]EventBase, error) {
 		req.SetQueryParam("offset", strconv.Itoa(*r.Offset))
 	}
 
-	resp, err := req.Get("/users/{user}/recent_activity")
+	resp, err := req.Get("users/{user}/recent_activity")
 	if err != nil {
 		return nil, err
 	}
@@ -624,7 +624,7 @@ func (r *GetUserRequest) Build() (*UserExtended, error) {
 	url.WriteString("/users/{user}")
 
 	if r.Mode != nil {
-		url.WriteString("/" + string(*r.Mode))
+		url.WriteString("/" + r.Mode.String())
 	}
 
 	if r.Key != nil {
@@ -656,7 +656,7 @@ func (r *GetUsersRequest) Build() (*GetUsersResponse, error) {
 		req.QueryParam.Add("ids[]", strconv.Itoa(id))
 	}
 
-	resp, err := req.Get("/users")
+	resp, err := req.Get("users")
 	if err != nil {
 		return nil, err
 	}
