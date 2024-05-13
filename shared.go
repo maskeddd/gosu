@@ -20,4 +20,4 @@ const (
 	F   Grade = "F"
 )
 
-type Cursor map[string]interface{}
+type Cursor interface{}
