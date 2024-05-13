@@ -6,7 +6,7 @@ WIP so a lot to be done. Goal is to have 100% coverage of the osu!api v2.
 - [ ] Authentication (currently only supports client credentials)
 - [ ] Beatmap Packs
 - [x] Beatmaps
-- [ ] Beatmapset Discussions
+- [x] Beatmapset Discussions
 - [x] Beatmapsets
 - [ ] Changelog
 - [ ] Chat
