@@ -383,7 +383,7 @@ func (r *GetUserScoresRequest) Build() (*[]UserScore, error) {
 	}
 
 	if r.Mode != nil {
-		req.SetQueryParam("mode", string(*r.Mode))
+		req.SetQueryParam("mode", r.Mode.String())
 	}
 
 	if r.Limit != nil {
