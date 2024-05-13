@@ -1,4 +1,4 @@
-module gosu
+module github.com/maskeddd/gosu
 
 go 1.22
 
