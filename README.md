@@ -1,6 +1,6 @@
 ## Coverage
 
-WIP so a lot to be done. Goal is to have 100% coverage of the osu!api v2.
+WIP so a lot to be done. Goal is to have 100% coverage of the documented osu!api v2.
 
 ### Endpoints
 - [ ] Authentication (currently only supports client credentials)
@@ -22,3 +22,4 @@ WIP so a lot to be done. Goal is to have 100% coverage of the osu!api v2.
 
 ### Other
 - [ ] Tests
+- [ ] Documentation
