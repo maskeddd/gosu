@@ -16,13 +16,6 @@ const (
 	MessageTypeReview     = "review"
 )
 
-type DiscussionSort string
-
-const (
-	DiscussionSortDescending = "id_desc"
-	DiscussionSortAscending  = "id_asc"
-)
-
 type DiscussionPostType string
 
 const (
@@ -123,7 +116,7 @@ type DiscussionBaseRequest struct {
 	client *Client
 	Limit  *int
 	Page   *int
-	Sort   *DiscussionSort
+	Sort   *Sort
 }
 
 type DiscussionPostsRequest struct {
@@ -169,7 +162,7 @@ func (r *DiscussionPostsRequest) SetPage(page int) *DiscussionPostsRequest {
 	return r
 }
 
-func (r *DiscussionPostsRequest) SetSort(sort DiscussionSort) *DiscussionPostsRequest {
+func (r *DiscussionPostsRequest) SetSort(sort Sort) *DiscussionPostsRequest {
 	r.Sort = &sort
 	return r
 }
@@ -255,7 +248,7 @@ func (r *DiscussionVotesRequest) SetPage(page int) *DiscussionVotesRequest {
 	return r
 }
 
-func (r *DiscussionVotesRequest) SetSort(sort DiscussionSort) *DiscussionVotesRequest {
+func (r *DiscussionVotesRequest) SetSort(sort Sort) *DiscussionVotesRequest {
 	r.Sort = &sort
 	return r
 }
@@ -360,7 +353,7 @@ func (r *DiscussionsRequest) SetPage(page int) *DiscussionsRequest {
 	return r
 }
 
-func (r *DiscussionsRequest) SetSort(sort DiscussionSort) *DiscussionsRequest {
+func (r *DiscussionsRequest) SetSort(sort Sort) *DiscussionsRequest {
 	r.Sort = &sort
 	return r
 }

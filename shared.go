@@ -9,15 +9,22 @@ type RankStatus int
 type Grade string
 
 const (
-	SS  Grade = "SS"
-	SSH Grade = "SSH"
-	S   Grade = "S"
-	SH  Grade = "SH"
-	A   Grade = "A"
-	B   Grade = "B"
-	C   Grade = "C"
-	D   Grade = "D"
-	F   Grade = "F"
+	GradeSS  Grade = "SS"
+	GradeSSH Grade = "SSH"
+	GradeS   Grade = "S"
+	GradeSH  Grade = "SH"
+	GradeA   Grade = "A"
+	GradeB   Grade = "B"
+	GradeC   Grade = "C"
+	GradeD   Grade = "D"
+	GradeF   Grade = "F"
 )
 
 type Cursor interface{}
+
+type Sort string
+
+const (
+	SortDescending = "id_desc"
+	SortAscending  = "id_asc"
+)
