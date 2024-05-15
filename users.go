@@ -284,7 +284,7 @@ type GetOwnDataRequest struct {
 }
 
 func (c *Client) GetOwnData() *GetOwnDataRequest {
-	return &GetOwnDataRequest{}
+	return &GetOwnDataRequest{client: c}
 }
 
 func (r *GetOwnDataRequest) SetMode(mode Ruleset) *GetOwnDataRequest {
