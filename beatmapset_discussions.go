@@ -126,55 +126,55 @@ type DiscussionBaseRequest struct {
 	Sort   *DiscussionSort
 }
 
-type GetDiscussionPostsRequest struct {
+type DiscussionPostsRequest struct {
 	DiscussionBaseRequest
 	BeatmapsetDiscussionID *int
 	Types                  []DiscussionPostType
 	User                   *int
 }
 
-func (c *Client) GetDiscussionPosts() *GetDiscussionPostsRequest {
-	return &GetDiscussionPostsRequest{
+func (c *Client) GetDiscussionPosts() *DiscussionPostsRequest {
+	return &DiscussionPostsRequest{
 		DiscussionBaseRequest: DiscussionBaseRequest{client: c},
 	}
 }
 
-func (r *GetDiscussionPostsRequest) SetDiscussionID(discussionID int) *GetDiscussionPostsRequest {
+func (r *DiscussionPostsRequest) SetDiscussionID(discussionID int) *DiscussionPostsRequest {
 	r.BeatmapsetDiscussionID = &discussionID
 	return r
 }
 
-func (r *GetDiscussionPostsRequest) AddType(types DiscussionPostType) *GetDiscussionPostsRequest {
+func (r *DiscussionPostsRequest) AddType(types DiscussionPostType) *DiscussionPostsRequest {
 	r.Types = append(r.Types, types)
 	return r
 }
 
-func (r *GetDiscussionPostsRequest) SetTypes(types []DiscussionPostType) *GetDiscussionPostsRequest {
+func (r *DiscussionPostsRequest) SetTypes(types []DiscussionPostType) *DiscussionPostsRequest {
 	r.Types = types
 	return r
 }
 
-func (r *GetDiscussionPostsRequest) SetUser(userID int) *GetDiscussionPostsRequest {
+func (r *DiscussionPostsRequest) SetUser(userID int) *DiscussionPostsRequest {
 	r.User = &userID
 	return r
 }
 
-func (r *GetDiscussionPostsRequest) SetLimit(limit int) *GetDiscussionPostsRequest {
+func (r *DiscussionPostsRequest) SetLimit(limit int) *DiscussionPostsRequest {
 	r.Limit = &limit
 	return r
 }
 
-func (r *GetDiscussionPostsRequest) SetPage(page int) *GetDiscussionPostsRequest {
+func (r *DiscussionPostsRequest) SetPage(page int) *DiscussionPostsRequest {
 	r.Page = &page
 	return r
 }
 
-func (r *GetDiscussionPostsRequest) SetSort(sort DiscussionSort) *GetDiscussionPostsRequest {
+func (r *DiscussionPostsRequest) SetSort(sort DiscussionSort) *DiscussionPostsRequest {
 	r.Sort = &sort
 	return r
 }
 
-func (r *GetDiscussionPostsRequest) Build() (*DiscussionPostsResponse, error) {
+func (r *DiscussionPostsRequest) Build() (*DiscussionPostsResponse, error) {
 	req := r.client.httpClient.R().SetResult(&DiscussionPostsResponse{})
 
 	if r.BeatmapsetDiscussionID != nil {
@@ -211,7 +211,7 @@ func (r *GetDiscussionPostsRequest) Build() (*DiscussionPostsResponse, error) {
 	return resp.Result().(*DiscussionPostsResponse), nil
 }
 
-type GetDiscussionVotesRequest struct {
+type DiscussionVotesRequest struct {
 	DiscussionBaseRequest
 	BeatmapsetDiscussionID *int
 	Receiver               *int                     `json:"receiver"`
@@ -219,48 +219,48 @@ type GetDiscussionVotesRequest struct {
 	User                   *int                     `json:"user"`
 }
 
-func (c *Client) GetDiscussionVotes() *GetDiscussionVotesRequest {
-	return &GetDiscussionVotesRequest{
+func (c *Client) GetDiscussionVotes() *DiscussionVotesRequest {
+	return &DiscussionVotesRequest{
 		DiscussionBaseRequest: DiscussionBaseRequest{client: c},
 	}
 }
 
-func (r *GetDiscussionVotesRequest) SetDiscussionID(discussionID int) *GetDiscussionVotesRequest {
+func (r *DiscussionVotesRequest) SetDiscussionID(discussionID int) *DiscussionVotesRequest {
 	r.BeatmapsetDiscussionID = &discussionID
 	return r
 }
 
-func (r *GetDiscussionVotesRequest) SetReceiver(receiverID int) *GetDiscussionVotesRequest {
+func (r *DiscussionVotesRequest) SetReceiver(receiverID int) *DiscussionVotesRequest {
 	r.Receiver = &receiverID
 	return r
 }
 
-func (r *GetDiscussionVotesRequest) SetScore(score DiscussionVoteDirection) *GetDiscussionVotesRequest {
+func (r *DiscussionVotesRequest) SetScore(score DiscussionVoteDirection) *DiscussionVotesRequest {
 	r.Score = &score
 	return r
 }
 
-func (r *GetDiscussionVotesRequest) SetUser(userID int) *GetDiscussionVotesRequest {
+func (r *DiscussionVotesRequest) SetUser(userID int) *DiscussionVotesRequest {
 	r.User = &userID
 	return r
 }
 
-func (r *GetDiscussionVotesRequest) SetLimit(limit int) *GetDiscussionVotesRequest {
+func (r *DiscussionVotesRequest) SetLimit(limit int) *DiscussionVotesRequest {
 	r.Limit = &limit
 	return r
 }
 
-func (r *GetDiscussionVotesRequest) SetPage(page int) *GetDiscussionVotesRequest {
+func (r *DiscussionVotesRequest) SetPage(page int) *DiscussionVotesRequest {
 	r.Page = &page
 	return r
 }
 
-func (r *GetDiscussionVotesRequest) SetSort(sort DiscussionSort) *GetDiscussionVotesRequest {
+func (r *DiscussionVotesRequest) SetSort(sort DiscussionSort) *DiscussionVotesRequest {
 	r.Sort = &sort
 	return r
 }
 
-func (r *GetDiscussionVotesRequest) Build() (*DiscussionVotesResponse, error) {
+func (r *DiscussionVotesRequest) Build() (*DiscussionVotesResponse, error) {
 	req := r.client.httpClient.R().SetResult(&DiscussionVotesResponse{})
 
 	if r.BeatmapsetDiscussionID != nil {
@@ -299,7 +299,7 @@ func (r *GetDiscussionVotesRequest) Build() (*DiscussionVotesResponse, error) {
 	return resp.Result().(*DiscussionVotesResponse), nil
 }
 
-type GetDiscussionsRequest struct {
+type DiscussionsRequest struct {
 	DiscussionBaseRequest
 	BeatmapID        *int `json:"beatmap_id"`
 	BeatmapsetID     *int `json:"beatmapset_id"`
@@ -309,63 +309,63 @@ type GetDiscussionsRequest struct {
 	User             *int          `json:"user"`
 }
 
-func (c *Client) GetDiscussions() *GetDiscussionsRequest {
-	return &GetDiscussionsRequest{
+func (c *Client) GetDiscussions() *DiscussionsRequest {
+	return &DiscussionsRequest{
 		DiscussionBaseRequest: DiscussionBaseRequest{client: c},
 	}
 }
 
-func (r *GetDiscussionsRequest) SetBeatmapID(beatmapID int) *GetDiscussionsRequest {
+func (r *DiscussionsRequest) SetBeatmapID(beatmapID int) *DiscussionsRequest {
 	r.BeatmapID = &beatmapID
 	return r
 }
 
-func (r *GetDiscussionsRequest) SetBeatmapsetID(beatmapsetID int) *GetDiscussionsRequest {
+func (r *DiscussionsRequest) SetBeatmapsetID(beatmapsetID int) *DiscussionsRequest {
 	r.BeatmapsetID = &beatmapsetID
 	return r
 }
 
-func (r *GetDiscussionsRequest) SetBeatmapsetStatus(status DiscussionStatus) *GetDiscussionsRequest {
+func (r *DiscussionsRequest) SetBeatmapsetStatus(status DiscussionStatus) *DiscussionsRequest {
 	r.BeatmapsetStatus = &status
 	return r
 }
 
-func (r *GetDiscussionsRequest) AddMessageType(types MessageType) *GetDiscussionsRequest {
+func (r *DiscussionsRequest) AddMessageType(types MessageType) *DiscussionsRequest {
 	r.MessageTypes = append(r.MessageTypes, types)
 	return r
 }
 
-func (r *GetDiscussionsRequest) SetMessageTypes(types []MessageType) *GetDiscussionsRequest {
+func (r *DiscussionsRequest) SetMessageTypes(types []MessageType) *DiscussionsRequest {
 	r.MessageTypes = types
 	return r
 }
 
-func (r *GetDiscussionsRequest) SetOnlyUnresolved(onlyUnresolved bool) *GetDiscussionsRequest {
+func (r *DiscussionsRequest) SetOnlyUnresolved(onlyUnresolved bool) *DiscussionsRequest {
 	r.OnlyUnresolved = &onlyUnresolved
 	return r
 }
 
-func (r *GetDiscussionsRequest) SetUser(userID int) *GetDiscussionsRequest {
+func (r *DiscussionsRequest) SetUser(userID int) *DiscussionsRequest {
 	r.User = &userID
 	return r
 }
 
-func (r *GetDiscussionsRequest) SetLimit(limit int) *GetDiscussionsRequest {
+func (r *DiscussionsRequest) SetLimit(limit int) *DiscussionsRequest {
 	r.Limit = &limit
 	return r
 }
 
-func (r *GetDiscussionsRequest) SetPage(page int) *GetDiscussionsRequest {
+func (r *DiscussionsRequest) SetPage(page int) *DiscussionsRequest {
 	r.Page = &page
 	return r
 }
 
-func (r *GetDiscussionsRequest) SetSort(sort DiscussionSort) *GetDiscussionsRequest {
+func (r *DiscussionsRequest) SetSort(sort DiscussionSort) *DiscussionsRequest {
 	r.Sort = &sort
 	return r
 }
 
-func (r *GetDiscussionsRequest) Build() (*DiscussionsResponse, error) {
+func (r *DiscussionsRequest) Build() (*DiscussionsResponse, error) {
 	req := r.client.httpClient.R().SetResult(&DiscussionsResponse{})
 
 	if r.BeatmapID != nil {

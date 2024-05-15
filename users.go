@@ -271,28 +271,28 @@ type GetUsersResponse struct {
 	} `json:"users"`
 }
 
-type GetUserKudosuRequest struct {
+type UserKudosuRequest struct {
 	client *Client
 	User   int
 	Limit  *int
 	Offset *int
 }
 
-func (c *Client) GetUserKudosu(user int) *GetUserKudosuRequest {
-	return &GetUserKudosuRequest{client: c, User: user}
+func (c *Client) GetUserKudosu(user int) *UserKudosuRequest {
+	return &UserKudosuRequest{client: c, User: user}
 }
 
-func (r *GetUserKudosuRequest) SetLimit(limit int) *GetUserKudosuRequest {
+func (r *UserKudosuRequest) SetLimit(limit int) *UserKudosuRequest {
 	r.Limit = &limit
 	return r
 }
 
-func (r *GetUserKudosuRequest) SetOffset(offset int) *GetUserKudosuRequest {
+func (r *UserKudosuRequest) SetOffset(offset int) *UserKudosuRequest {
 	r.Offset = &offset
 	return r
 }
 
-func (r *GetUserKudosuRequest) Build() (*[]KudosuHistory, error) {
+func (r *UserKudosuRequest) Build() (*[]KudosuHistory, error) {
 	req := r.client.httpClient.R().SetResult(&[]KudosuHistory{})
 
 	req.SetPathParam("user", strconv.Itoa(r.User))
@@ -313,7 +313,7 @@ func (r *GetUserKudosuRequest) Build() (*[]KudosuHistory, error) {
 	return resp.Result().(*[]KudosuHistory), nil
 }
 
-type GetUserScoresRequest struct {
+type UserScoresRequest struct {
 	client       *Client
 	User         int
 	Type         ScoreType
@@ -323,46 +323,46 @@ type GetUserScoresRequest struct {
 	Offset       *int
 }
 
-func (c *Client) GetUserScores(user int) *GetUserScoresRequest {
-	return &GetUserScoresRequest{client: c, User: user}
+func (c *Client) GetUserScores(user int) *UserScoresRequest {
+	return &UserScoresRequest{client: c, User: user}
 }
 
-func (r *GetUserScoresRequest) Best() *GetUserScoresRequest {
+func (r *UserScoresRequest) Best() *UserScoresRequest {
 	r.Type = ScoreTypeBest
 	return r
 }
 
-func (r *GetUserScoresRequest) Firsts() *GetUserScoresRequest {
+func (r *UserScoresRequest) Firsts() *UserScoresRequest {
 	r.Type = ScoreTypeFirsts
 	return r
 }
 
-func (r *GetUserScoresRequest) Pinned() *GetUserScoresRequest {
+func (r *UserScoresRequest) Pinned() *UserScoresRequest {
 	r.Type = ScoreTypePinned
 	return r
 }
 
-func (r *GetUserScoresRequest) Recent() *GetUserScoresRequest {
+func (r *UserScoresRequest) Recent() *UserScoresRequest {
 	r.Type = ScoreTypeRecent
 	return r
 }
 
-func (r *GetUserScoresRequest) SetIncludeFails(includeFails bool) *GetUserScoresRequest {
+func (r *UserScoresRequest) SetIncludeFails(includeFails bool) *UserScoresRequest {
 	r.IncludeFails = &includeFails
 	return r
 }
 
-func (r *GetUserScoresRequest) SetLimit(limit int) *GetUserScoresRequest {
+func (r *UserScoresRequest) SetLimit(limit int) *UserScoresRequest {
 	r.Limit = &limit
 	return r
 }
 
-func (r *GetUserScoresRequest) SetOffset(offset int) *GetUserScoresRequest {
+func (r *UserScoresRequest) SetOffset(offset int) *UserScoresRequest {
 	r.Offset = &offset
 	return r
 }
 
-func (r *GetUserScoresRequest) Build() (*[]UserScore, error) {
+func (r *UserScoresRequest) Build() (*[]UserScore, error) {
 	req := r.client.httpClient.R().SetResult(&[]UserScore{})
 
 	req.SetPathParams(map[string]string{
@@ -402,7 +402,7 @@ func (r *GetUserScoresRequest) Build() (*[]UserScore, error) {
 	return resp.Result().(*[]UserScore), nil
 }
 
-type GetUserBeatmapsetsRequest struct {
+type UserBeatmapsetsRequest struct {
 	client  *Client
 	User    int
 	MapType string
@@ -410,11 +410,11 @@ type GetUserBeatmapsetsRequest struct {
 	Offset  *int
 }
 
-func (c *Client) GetUserBeatmapsets(user int) *GetUserBeatmapsetsRequest {
-	return &GetUserBeatmapsetsRequest{client: c, User: user, MapType: "ranked"}
+func (c *Client) GetUserBeatmapsets(user int) *UserBeatmapsetsRequest {
+	return &UserBeatmapsetsRequest{client: c, User: user, MapType: "ranked"}
 }
 
-func (r *GetUserBeatmapsetsRequest) SetStatus(mapType RankStatus) *GetUserBeatmapsetsRequest {
+func (r *UserBeatmapsetsRequest) SetStatus(mapType RankStatus) *UserBeatmapsetsRequest {
 	switch mapType {
 	case RankStatusApproved, RankStatusRanked:
 		r.MapType = "ranked"
@@ -428,37 +428,37 @@ func (r *GetUserBeatmapsetsRequest) SetStatus(mapType RankStatus) *GetUserBeatma
 	return r
 }
 
-func (r *GetUserBeatmapsetsRequest) Ranked() *GetUserBeatmapsetsRequest {
+func (r *UserBeatmapsetsRequest) Ranked() *UserBeatmapsetsRequest {
 	r.MapType = "ranked"
 	return r
 }
 
-func (r *GetUserBeatmapsetsRequest) Loved() *GetUserBeatmapsetsRequest {
+func (r *UserBeatmapsetsRequest) Loved() *UserBeatmapsetsRequest {
 	r.MapType = "loved"
 	return r
 }
 
-func (r *GetUserBeatmapsetsRequest) Pending() *GetUserBeatmapsetsRequest {
+func (r *UserBeatmapsetsRequest) Pending() *UserBeatmapsetsRequest {
 	r.MapType = "pending"
 	return r
 }
 
-func (r *GetUserBeatmapsetsRequest) Graveyard() *GetUserBeatmapsetsRequest {
+func (r *UserBeatmapsetsRequest) Graveyard() *UserBeatmapsetsRequest {
 	r.MapType = "graveyard"
 	return r
 }
 
-func (r *GetUserBeatmapsetsRequest) SetLimit(limit int) *GetUserBeatmapsetsRequest {
+func (r *UserBeatmapsetsRequest) SetLimit(limit int) *UserBeatmapsetsRequest {
 	r.Limit = &limit
 	return r
 }
 
-func (r *GetUserBeatmapsetsRequest) SetOffset(offset int) *GetUserBeatmapsetsRequest {
+func (r *UserBeatmapsetsRequest) SetOffset(offset int) *UserBeatmapsetsRequest {
 	r.Offset = &offset
 	return r
 }
 
-func (r *GetUserBeatmapsetsRequest) Build() (*[]UserBeatmapset, error) {
+func (r *UserBeatmapsetsRequest) Build() (*[]UserBeatmapset, error) {
 	req := r.client.httpClient.R().SetResult(&[]UserBeatmapset{})
 
 	req.SetPathParams(map[string]string{
@@ -483,28 +483,28 @@ func (r *GetUserBeatmapsetsRequest) Build() (*[]UserBeatmapset, error) {
 
 }
 
-type GetUserMostPlayedRequest struct {
+type UserMostPlayedRequest struct {
 	client *Client
 	User   int
 	Limit  *int
 	Offset *int
 }
 
-func (c *Client) GetUserMostPlayed(user int) *GetUserMostPlayedRequest {
-	return &GetUserMostPlayedRequest{client: c, User: user}
+func (c *Client) GetUserMostPlayed(user int) *UserMostPlayedRequest {
+	return &UserMostPlayedRequest{client: c, User: user}
 }
 
-func (r *GetUserMostPlayedRequest) SetLimit(limit int) *GetUserMostPlayedRequest {
+func (r *UserMostPlayedRequest) SetLimit(limit int) *UserMostPlayedRequest {
 	r.Limit = &limit
 	return r
 }
 
-func (r *GetUserMostPlayedRequest) SetOffset(offset int) *GetUserMostPlayedRequest {
+func (r *UserMostPlayedRequest) SetOffset(offset int) *UserMostPlayedRequest {
 	r.Offset = &offset
 	return r
 }
 
-func (r *GetUserMostPlayedRequest) Build() (*[]GetUserMostPlayedResponse, error) {
+func (r *UserMostPlayedRequest) Build() (*[]GetUserMostPlayedResponse, error) {
 	req := r.client.httpClient.R().SetResult(&[]GetUserMostPlayedResponse{})
 
 	req.SetPathParams(map[string]string{
@@ -528,28 +528,28 @@ func (r *GetUserMostPlayedRequest) Build() (*[]GetUserMostPlayedResponse, error)
 	return resp.Result().(*[]GetUserMostPlayedResponse), nil
 }
 
-type GetUserRecentActivityRequest struct {
+type UserRecentActivityRequest struct {
 	client *Client
 	User   int
 	Limit  *int
 	Offset *int
 }
 
-func (c *Client) GetUserRecentActivity(user int) *GetUserRecentActivityRequest {
-	return &GetUserRecentActivityRequest{client: c, User: user}
+func (c *Client) GetUserRecentActivity(user int) *UserRecentActivityRequest {
+	return &UserRecentActivityRequest{client: c, User: user}
 }
 
-func (r *GetUserRecentActivityRequest) SetLimit(limit int) *GetUserRecentActivityRequest {
+func (r *UserRecentActivityRequest) SetLimit(limit int) *UserRecentActivityRequest {
 	r.Limit = &limit
 	return r
 }
 
-func (r *GetUserRecentActivityRequest) SetOffset(offset int) *GetUserRecentActivityRequest {
+func (r *UserRecentActivityRequest) SetOffset(offset int) *UserRecentActivityRequest {
 	r.Offset = &offset
 	return r
 }
 
-func (r *GetUserRecentActivityRequest) Build() (*[]EventBase, error) {
+func (r *UserRecentActivityRequest) Build() (*[]EventBase, error) {
 	req := r.client.httpClient.R().SetResult(&[]map[string]interface{}{})
 
 	req.SetPathParam("user", strconv.Itoa(r.User))
@@ -589,22 +589,22 @@ func (r *GetUserRecentActivityRequest) Build() (*[]EventBase, error) {
 	return &result, nil
 }
 
-type GetUserRequest struct {
+type UserRequest struct {
 	client *Client
 	User   string
 	Mode   *Ruleset
 }
 
-func (c *Client) GetUser(user string) *GetUserRequest {
-	return &GetUserRequest{client: c, User: user}
+func (c *Client) GetUser(user string) *UserRequest {
+	return &UserRequest{client: c, User: user}
 }
 
-func (r *GetUserRequest) SetMode(mode Ruleset) *GetUserRequest {
+func (r *UserRequest) SetMode(mode Ruleset) *UserRequest {
 	r.Mode = &mode
 	return r
 }
 
-func (r *GetUserRequest) Build() (*UserExtended, error) {
+func (r *UserRequest) Build() (*UserExtended, error) {
 	req := r.client.httpClient.R().SetResult(&UserExtended{}).SetPathParam("user", r.User)
 
 	var url strings.Builder
@@ -622,16 +622,16 @@ func (r *GetUserRequest) Build() (*UserExtended, error) {
 	return resp.Result().(*UserExtended), nil
 }
 
-type GetUsersRequest struct {
+type UsersRequest struct {
 	client *Client
 	Users  []int
 }
 
-func (c *Client) GetUsers(userIds []int) *GetUsersRequest {
-	return &GetUsersRequest{client: c, Users: userIds}
+func (c *Client) GetUsers(userIds []int) *UsersRequest {
+	return &UsersRequest{client: c, Users: userIds}
 }
 
-func (r *GetUsersRequest) Build() (*GetUsersResponse, error) {
+func (r *UsersRequest) Build() (*GetUsersResponse, error) {
 	req := r.client.httpClient.R().SetResult(&GetUsersResponse{})
 
 	for _, id := range r.Users {
