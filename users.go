@@ -271,6 +271,42 @@ type GetUsersResponse struct {
 	} `json:"users"`
 }
 
+type OwnDataResponse struct {
+	UserExtended
+	IsRestricted       bool               `json:"is_restricted"`
+	SessionVerified    bool               `json:"session_verified"`
+	StatisticsRulesets StatisticsRulesets `json:"statistics_rulesets"`
+}
+
+type GetOwnDataRequest struct {
+	client *Client
+	Mode   *Ruleset
+}
+
+func (c *Client) GetOwnData() *GetOwnDataRequest {
+	return &GetOwnDataRequest{}
+}
+
+func (r *GetOwnDataRequest) SetMode(mode Ruleset) *GetOwnDataRequest {
+	r.Mode = &mode
+	return r
+}
+
+func (r *GetOwnDataRequest) Build() (*OwnDataResponse, error) {
+	req := r.client.httpClient.R().SetResult(&OwnDataResponse{})
+
+	if r.Mode != nil {
+		req.SetQueryParam("mode", r.Mode.String())
+	}
+
+	resp, err := req.Get("me")
+	if resp == nil {
+		return nil, err
+	}
+
+	return resp.Result().(*OwnDataResponse), nil
+}
+
 type UserKudosuRequest struct {
 	client *Client
 	User   int
