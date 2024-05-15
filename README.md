@@ -16,9 +16,9 @@ WIP so a lot to be done. Goal is to have 100% coverage of the documented osu!api
 - [ ] Home
 - [ ] Multiplayer
 - [ ] News
-- [ ] Ranking
+- [x] Ranking
 - [x] Users
-- [ ] Wiki
+- [x] Wiki
 
 ### Other
 - [ ] Tests
