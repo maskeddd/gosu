@@ -14,12 +14,11 @@ WIP. Goal is to have 100% coverage of the documented osu!api v2.
 - [x] Beatmaps
 - [x] Beatmapset Discussions
 - [x] Beatmapsets
-- [ ] Changelog
+- [x] Changelog
 - [ ] Chat
 - [ ] Comments
 - [x] Events
 - [ ] Forum
-- [ ] Home
 - [ ] Multiplayer
 - [x] News
 - [x] Ranking
