@@ -86,8 +86,6 @@ func (r *NewsListingRequest) Build() (*NewsListingResponse, error) {
 		return nil, err
 	}
 
-	println(resp.String())
-
 	return resp.Result().(*NewsListingResponse), nil
 }
 
@@ -120,8 +118,6 @@ func (r *NewsPostRequest) Build() (*NewsPostResponse, error) {
 	if err != nil {
 		return nil, err
 	}
-
-	println(resp.String())
 
 	return resp.Result().(*NewsPostResponse), nil
 }
