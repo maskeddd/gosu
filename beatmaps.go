@@ -260,35 +260,35 @@ func (r *BeatmapRequest) Build() (*BeatmapResponse, error) {
 	return resp.Result().(*BeatmapResponse), nil
 }
 
-type BeatmapLookupRequest struct {
+type LookupBeatmapRequest struct {
 	client   *Client
 	Checksum *string
 	Filename *string
 	ID       *int
 }
 
-// GetBeatmapLookup returns beatmap.
+// LookupBeatmap returns beatmap.
 // https://osu.ppy.sh/docs/index.html#beatmaps
-func (c *Client) GetBeatmapLookup() *BeatmapLookupRequest {
-	return &BeatmapLookupRequest{client: c}
+func (c *Client) LookupBeatmap() *LookupBeatmapRequest {
+	return &LookupBeatmapRequest{client: c}
 }
 
-func (r *BeatmapLookupRequest) SetChecksum(checksum string) *BeatmapLookupRequest {
+func (r *LookupBeatmapRequest) SetChecksum(checksum string) *LookupBeatmapRequest {
 	r.Checksum = &checksum
 	return r
 }
 
-func (r *BeatmapLookupRequest) SetFilename(filename string) *BeatmapLookupRequest {
+func (r *LookupBeatmapRequest) SetFilename(filename string) *LookupBeatmapRequest {
 	r.Filename = &filename
 	return r
 }
 
-func (r *BeatmapLookupRequest) SetID(id int) *BeatmapLookupRequest {
+func (r *LookupBeatmapRequest) SetID(id int) *LookupBeatmapRequest {
 	r.ID = &id
 	return r
 }
 
-func (r *BeatmapLookupRequest) Build() (*BeatmapResponse, error) {
+func (r *LookupBeatmapRequest) Build() (*BeatmapResponse, error) {
 	req := r.client.httpClient.R().SetResult(&BeatmapResponse{})
 
 	if r.Checksum != nil {
