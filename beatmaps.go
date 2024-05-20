@@ -2,8 +2,7 @@ package gosu
 
 import (
 	"encoding/json"
-	"fmt"
-	"github.com/tidwall/gjson"
+	"github.com/mitchellh/mapstructure"
 	"reflect"
 	"strconv"
 	"time"
@@ -44,7 +43,7 @@ type Beatmap struct {
 }
 
 type GetBeatmapsResponse struct {
-	Beatmaps []GetBeatmapResponse `json:"beatmaps"`
+	Beatmaps []BeatmapResponse `json:"beatmaps"`
 }
 
 type FailTimes struct {
@@ -81,7 +80,7 @@ type UserBeatmapScore struct {
 	} `json:"score"`
 }
 
-type GetBeatmapResponse struct {
+type BeatmapResponse struct {
 	Beatmap
 	Beatmapset struct {
 		Beatmapset
@@ -92,14 +91,14 @@ type GetBeatmapResponse struct {
 	MaxCombo  int       `json:"max_combo"`
 }
 
-type GetUserMostPlayedResponse struct {
+type UserMostPlayedResponse struct {
 	BeatmapID  int                `json:"beatmap_id"`
 	Beatmap    *BeatmapCompact    `json:"beatmap"`
 	Beatmapset *BeatmapsetCompact `json:"beatmapset"`
 	Count      int                `json:"count"`
 }
 
-type GetUserBeatmapScoreRequest struct {
+type UserBeatmapScoreRequest struct {
 	client  *Client
 	Beatmap int
 	User    int
@@ -108,16 +107,16 @@ type GetUserBeatmapScoreRequest struct {
 
 // GetUserBeatmapScore returns a User's score on a beatmap.
 // https://osu.ppy.sh/docs/index.html#get-a-user-beatmap-score
-func (c *Client) GetUserBeatmapScore(beatmap int, user int) *GetUserBeatmapScoreRequest {
-	return &GetUserBeatmapScoreRequest{client: c, Beatmap: beatmap, User: user}
+func (c *Client) GetUserBeatmapScore(beatmap int, user int) *UserBeatmapScoreRequest {
+	return &UserBeatmapScoreRequest{client: c, Beatmap: beatmap, User: user}
 }
 
-func (r *GetUserBeatmapScoreRequest) SetMode(mode Ruleset) *GetUserBeatmapScoreRequest {
+func (r *UserBeatmapScoreRequest) SetMode(mode Ruleset) *UserBeatmapScoreRequest {
 	r.Mode = &mode
 	return r
 }
 
-func (r *GetUserBeatmapScoreRequest) Build() (*UserBeatmapScore, error) {
+func (r *UserBeatmapScoreRequest) Build() (*UserBeatmapScore, error) {
 	req := r.client.httpClient.R().SetResult(&UserBeatmapScore{})
 
 	req.SetPathParams(map[string]string{
@@ -137,7 +136,7 @@ func (r *GetUserBeatmapScoreRequest) Build() (*UserBeatmapScore, error) {
 	return resp.Result().(*UserBeatmapScore), nil
 }
 
-type GetUserBeatmapScoresRequest struct {
+type UserBeatmapScoresRequest struct {
 	client  *Client
 	Beatmap int
 	User    int
@@ -146,16 +145,16 @@ type GetUserBeatmapScoresRequest struct {
 
 // GetUserBeatmapScores returns a User's scores on a beatmap.
 // https://osu.ppy.sh/docs/index.html#get-a-user-beatmap-scores
-func (c *Client) GetUserBeatmapScores(beatmap int, user int) *GetUserBeatmapScoresRequest {
-	return &GetUserBeatmapScoresRequest{client: c, Beatmap: beatmap, User: user}
+func (c *Client) GetUserBeatmapScores(beatmap int, user int) *UserBeatmapScoresRequest {
+	return &UserBeatmapScoresRequest{client: c, Beatmap: beatmap, User: user}
 }
 
-func (r *GetUserBeatmapScoresRequest) SetMode(mode Ruleset) *GetUserBeatmapScoresRequest {
+func (r *UserBeatmapScoresRequest) SetMode(mode Ruleset) *UserBeatmapScoresRequest {
 	r.Mode = &mode
 	return r
 }
 
-func (r *GetUserBeatmapScoresRequest) Build() (*UserBeatmapScores, error) {
+func (r *UserBeatmapScoresRequest) Build() (*UserBeatmapScores, error) {
 	req := r.client.httpClient.R().SetResult(&UserBeatmapScores{})
 
 	req.SetPathParams(map[string]string{
@@ -175,7 +174,7 @@ func (r *GetUserBeatmapScoresRequest) Build() (*UserBeatmapScores, error) {
 	return resp.Result().(*UserBeatmapScores), nil
 }
 
-type GetBeatmapScoresRequest struct {
+type BeatmapScoresRequest struct {
 	client  *Client
 	Beatmap int
 	Mode    *Ruleset
@@ -183,16 +182,16 @@ type GetBeatmapScoresRequest struct {
 
 // GetBeatmapScores returns a User's scores on a beatmap.
 // https://osu.ppy.sh/docs/index.html#get-a-user-beatmap-scores
-func (c *Client) GetBeatmapScores(beatmap int) *GetBeatmapScoresRequest {
-	return &GetBeatmapScoresRequest{client: c, Beatmap: beatmap}
+func (c *Client) GetBeatmapScores(beatmap int) *BeatmapScoresRequest {
+	return &BeatmapScoresRequest{client: c, Beatmap: beatmap}
 }
 
-func (r *GetBeatmapScoresRequest) SetMode(mode Ruleset) *GetBeatmapScoresRequest {
+func (r *BeatmapScoresRequest) SetMode(mode Ruleset) *BeatmapScoresRequest {
 	r.Mode = &mode
 	return r
 }
 
-func (r *GetBeatmapScoresRequest) Build() (*BeatmapScores, error) {
+func (r *BeatmapScoresRequest) Build() (*BeatmapScores, error) {
 	req := r.client.httpClient.R().SetResult(&BeatmapScores{})
 
 	req.SetPathParams(map[string]string{
@@ -211,18 +210,18 @@ func (r *GetBeatmapScoresRequest) Build() (*BeatmapScores, error) {
 	return resp.Result().(*BeatmapScores), nil
 }
 
-type GetBeatmapsRequest struct {
+type BeatmapsRequest struct {
 	client   *Client
 	Beatmaps []int
 }
 
 // GetBeatmaps returns a list of beatmaps.
 // https://osu.ppy.sh/docs/index.html#get-beatmaps
-func (c *Client) GetBeatmaps(beatmaps []int) *GetBeatmapsRequest {
-	return &GetBeatmapsRequest{client: c, Beatmaps: beatmaps}
+func (c *Client) GetBeatmaps(beatmaps []int) *BeatmapsRequest {
+	return &BeatmapsRequest{client: c, Beatmaps: beatmaps}
 }
 
-func (r *GetBeatmapsRequest) Build() (*GetBeatmapsResponse, error) {
+func (r *BeatmapsRequest) Build() (*GetBeatmapsResponse, error) {
 	req := r.client.httpClient.R().SetResult(&GetBeatmapsResponse{})
 
 	for _, id := range r.Beatmaps {
@@ -237,19 +236,19 @@ func (r *GetBeatmapsRequest) Build() (*GetBeatmapsResponse, error) {
 	return resp.Result().(*GetBeatmapsResponse), nil
 }
 
-type GetBeatmapRequest struct {
+type BeatmapRequest struct {
 	client  *Client
 	Beatmap int
 }
 
 // GetBeatmap returns beatmap data for the specified beatmap ID.
 // https://osu.ppy.sh/docs/index.html#get-beatmaps
-func (c *Client) GetBeatmap(beatmap int) *GetBeatmapRequest {
-	return &GetBeatmapRequest{client: c, Beatmap: beatmap}
+func (c *Client) GetBeatmap(beatmap int) *BeatmapRequest {
+	return &BeatmapRequest{client: c, Beatmap: beatmap}
 }
 
-func (r *GetBeatmapRequest) Build() (*GetBeatmapResponse, error) {
-	req := r.client.httpClient.R().SetResult(&GetBeatmapResponse{})
+func (r *BeatmapRequest) Build() (*BeatmapResponse, error) {
+	req := r.client.httpClient.R().SetResult(&BeatmapResponse{})
 
 	req.SetPathParam("id", strconv.Itoa(r.Beatmap))
 
@@ -258,10 +257,10 @@ func (r *GetBeatmapRequest) Build() (*GetBeatmapResponse, error) {
 		return nil, err
 	}
 
-	return resp.Result().(*GetBeatmapResponse), nil
+	return resp.Result().(*BeatmapResponse), nil
 }
 
-type GetBeatmapLookupRequest struct {
+type BeatmapLookupRequest struct {
 	client   *Client
 	Checksum *string
 	Filename *string
@@ -270,27 +269,27 @@ type GetBeatmapLookupRequest struct {
 
 // GetBeatmapLookup returns beatmap.
 // https://osu.ppy.sh/docs/index.html#beatmaps
-func (c *Client) GetBeatmapLookup() *GetBeatmapLookupRequest {
-	return &GetBeatmapLookupRequest{client: c}
+func (c *Client) GetBeatmapLookup() *BeatmapLookupRequest {
+	return &BeatmapLookupRequest{client: c}
 }
 
-func (r *GetBeatmapLookupRequest) SetChecksum(checksum string) *GetBeatmapLookupRequest {
+func (r *BeatmapLookupRequest) SetChecksum(checksum string) *BeatmapLookupRequest {
 	r.Checksum = &checksum
 	return r
 }
 
-func (r *GetBeatmapLookupRequest) SetFilename(filename string) *GetBeatmapLookupRequest {
+func (r *BeatmapLookupRequest) SetFilename(filename string) *BeatmapLookupRequest {
 	r.Filename = &filename
 	return r
 }
 
-func (r *GetBeatmapLookupRequest) SetID(id int) *GetBeatmapLookupRequest {
+func (r *BeatmapLookupRequest) SetID(id int) *BeatmapLookupRequest {
 	r.ID = &id
 	return r
 }
 
-func (r *GetBeatmapLookupRequest) Build() (*GetBeatmapResponse, error) {
-	req := r.client.httpClient.R().SetResult(&GetBeatmapResponse{})
+func (r *BeatmapLookupRequest) Build() (*BeatmapResponse, error) {
+	req := r.client.httpClient.R().SetResult(&BeatmapResponse{})
 
 	if r.Checksum != nil {
 		req.SetQueryParam("checksum", *r.Checksum)
@@ -309,45 +308,44 @@ func (r *GetBeatmapLookupRequest) Build() (*GetBeatmapResponse, error) {
 		return nil, err
 	}
 
-	return resp.Result().(*GetBeatmapResponse), nil
+	return resp.Result().(*BeatmapResponse), nil
 }
 
 type BaseDifficultyAttributes struct {
-	MaxCombo   int     `json:"max_combo"`
-	StarRating float64 `json:"star_rating"`
+	Attributes struct {
+		MaxCombo          int                `json:"max_combo"`
+		StarRating        float32            `json:"star_rating"`
+		RulesetAttributes map[string]float32 `json:"ruleset_attributes,remain"`
+	} `json:"attributes"`
 }
 
 type OsuDifficultyAttributes struct {
-	BaseDifficultyAttributes
-	AimDifficulty        float64 `json:"aim_difficulty"`
-	SpeedDifficulty      float64 `json:"speed_difficulty"`
-	SpeedNoteCount       float64 `json:"speed_note_count"`
-	FlashlightDifficulty int     `json:"flashlight_difficulty"`
-	SliderFactor         float64 `json:"slider_factor"`
-	ApproachRate         int     `json:"approach_rate"`
-	OverallDifficulty    int     `json:"overall_difficulty"`
+	AimDifficulty        float32 `json:"aim_difficulty"`
+	SpeedDifficulty      float32 `json:"speed_difficulty"`
+	SpeedNoteCount       float32 `json:"speed_note_count"`
+	FlashlightDifficulty float32 `json:"flashlight_difficulty"`
+	SliderFactor         float32 `json:"slider_factor"`
+	ApproachRate         float32 `json:"approach_rate"`
+	OverallDifficulty    float32 `json:"overall_difficulty"`
 }
 
 type TaikoDifficultyAttributes struct {
-	BaseDifficultyAttributes
-	StaminaDifficulty int `json:"stamina_difficulty"`
-	RhythmDifficulty  int `json:"rhythm_difficulty"`
-	ColourDifficulty  int `json:"colour_difficulty"`
-	PeakDifficulty    int `json:"peak_difficulty"`
-	GreatHitWindow    int `json:"great_hit_window"`
+	StaminaDifficulty float32 `json:"stamina_difficulty"`
+	RhythmDifficulty  float32 `json:"rhythm_difficulty"`
+	ColourDifficulty  float32 `json:"colour_difficulty"`
+	PeakDifficulty    float32 `json:"peak_difficulty"`
+	GreatHitWindow    float32 `json:"great_hit_window"`
 }
 
 type FruitsDifficultyAttributes struct {
-	BaseDifficultyAttributes
 	ApproachRate float32 `json:"approach_rate"`
 }
 
 type ManiaDifficultyAttributes struct {
-	BaseDifficultyAttributes
 	GreatHitWindow float32 `json:"great_hit_window"`
 }
 
-type GetBeatmapAttributesRequest struct {
+type BeatmapAttributesRequest struct {
 	client  *Client
 	Beatmap int
 	Mods    Mod
@@ -356,21 +354,21 @@ type GetBeatmapAttributesRequest struct {
 
 // GetBeatmapAttributes returns difficulty attributes of beatmap with specific mode and mods combination.
 // https://osu.ppy.sh/docs/index.html#get-beatmap-attributes
-func (c *Client) GetBeatmapAttributes(beatmap int) *GetBeatmapAttributesRequest {
-	return &GetBeatmapAttributesRequest{client: c, Beatmap: beatmap}
+func (c *Client) GetBeatmapAttributes(beatmap int) *BeatmapAttributesRequest {
+	return &BeatmapAttributesRequest{client: c, Beatmap: beatmap}
 }
 
-func (r *GetBeatmapAttributesRequest) SetMods(mods Mod) *GetBeatmapAttributesRequest {
+func (r *BeatmapAttributesRequest) SetMods(mods Mod) *BeatmapAttributesRequest {
 	r.Mods = mods
 	return r
 }
 
-func (r *GetBeatmapAttributesRequest) AddMods(mods Mod) *GetBeatmapAttributesRequest {
+func (r *BeatmapAttributesRequest) AddMods(mods Mod) *BeatmapAttributesRequest {
 	r.Mods |= mods
 	return r
 }
 
-func (r *GetBeatmapAttributesRequest) SetMode(mode Ruleset) *GetBeatmapAttributesRequest {
+func (r *BeatmapAttributesRequest) SetMode(mode Ruleset) *BeatmapAttributesRequest {
 	r.Mode = &mode
 	return r
 }
@@ -379,8 +377,8 @@ type GenericDifficultyAttributes struct {
 	Attributes json.RawMessage `json:"attributes"`
 }
 
-func (r *GetBeatmapAttributesRequest) Build() (interface{}, error) {
-	req := r.client.httpClient.R().SetPathParam("beatmap", strconv.Itoa(r.Beatmap))
+func (r *BeatmapAttributesRequest) Build() (*BaseDifficultyAttributes, error) {
+	req := r.client.httpClient.R().SetResult(&map[string]interface{}{}).SetPathParam("beatmap", strconv.Itoa(r.Beatmap))
 
 	body := make(map[string]interface{})
 
@@ -397,22 +395,25 @@ func (r *GetBeatmapAttributesRequest) Build() (interface{}, error) {
 		return nil, err
 	}
 
-	attributes := gjson.Get(resp.String(), "attributes")
+	attributes := resp.Result().(*map[string]interface{})
 
-	var result interface{}
-
-	switch { // Response is unknown type, therefore check using present fields
-	case attributes.Get("aim_difficulty").Exists():
-		result = &OsuDifficultyAttributes{}
-	case attributes.Get("stamina_difficulty").Exists():
-		result = &TaikoDifficultyAttributes{}
-	case attributes.Get("approach_rate").Exists():
-		result = &FruitsDifficultyAttributes{}
-	case attributes.Get("great_hit_window").Exists():
-		result = &ManiaDifficultyAttributes{}
-	default:
-		return nil, fmt.Errorf("no matching attribute found")
+	var result BaseDifficultyAttributes
+	config := &mapstructure.DecoderConfig{
+		Result:  &result,
+		TagName: "json",
 	}
 
-	return result, json.Unmarshal([]byte(attributes.String()), result)
+	decoder, err := mapstructure.NewDecoder(config)
+	if err != nil {
+		return nil, err
+	}
+
+	err = decoder.Decode(*attributes)
+	if err != nil {
+		return nil, err
+	}
+
+	println(resp.String())
+
+	return &result, nil
 }
