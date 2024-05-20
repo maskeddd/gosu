@@ -125,6 +125,7 @@ type ChangelogBuildRequest struct {
 	BuildVersion string
 }
 
+// GetChangelogBuild returns details of the specified build.
 func (c *Client) GetChangelogBuild(stream string, build string) *ChangelogBuildRequest {
 	return &ChangelogBuildRequest{client: c, Stream: stream, BuildVersion: build}
 }
@@ -150,6 +151,7 @@ type ChangelogListingRequest struct {
 	MessageFormats []MessageFormat
 }
 
+// GetChangelogListing returns a listing of update streams, builds, and changelog entries.
 func (c *Client) GetChangelogListing() *ChangelogListingRequest {
 	return &ChangelogListingRequest{client: c}
 }
@@ -219,6 +221,7 @@ type LookupChangelogBuildRequest struct {
 	MessageFormats []MessageFormat
 }
 
+// LookupChangelogBuild returns details of the specified build.
 func (c *Client) LookupChangelogBuild(changelog string) *LookupChangelogBuildRequest {
 	return &LookupChangelogBuildRequest{client: c, Changelog: changelog}
 }

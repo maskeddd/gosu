@@ -105,8 +105,7 @@ type UserBeatmapScoreRequest struct {
 	Mode    *Ruleset
 }
 
-// GetUserBeatmapScore returns a User's score on a beatmap.
-// https://osu.ppy.sh/docs/index.html#get-a-user-beatmap-score
+// GetUserBeatmapScore returns a user's score on a beatmap.
 func (c *Client) GetUserBeatmapScore(beatmap int, user int) *UserBeatmapScoreRequest {
 	return &UserBeatmapScoreRequest{client: c, Beatmap: beatmap, User: user}
 }
@@ -143,8 +142,7 @@ type UserBeatmapScoresRequest struct {
 	Mode    *Ruleset
 }
 
-// GetUserBeatmapScores returns a User's scores on a beatmap.
-// https://osu.ppy.sh/docs/index.html#get-a-user-beatmap-scores
+// GetUserBeatmapScores returns a user's scores on a beatmap.
 func (c *Client) GetUserBeatmapScores(beatmap int, user int) *UserBeatmapScoresRequest {
 	return &UserBeatmapScoresRequest{client: c, Beatmap: beatmap, User: user}
 }
@@ -180,8 +178,7 @@ type BeatmapScoresRequest struct {
 	Mode    *Ruleset
 }
 
-// GetBeatmapScores returns a User's scores on a beatmap.
-// https://osu.ppy.sh/docs/index.html#get-a-user-beatmap-scores
+// GetBeatmapScores returns the top scores for a beatmap. Depending on user preferences, this may only show legacy scores.
 func (c *Client) GetBeatmapScores(beatmap int) *BeatmapScoresRequest {
 	return &BeatmapScoresRequest{client: c, Beatmap: beatmap}
 }
@@ -216,7 +213,6 @@ type BeatmapsRequest struct {
 }
 
 // GetBeatmaps returns a list of beatmaps.
-// https://osu.ppy.sh/docs/index.html#get-beatmaps
 func (c *Client) GetBeatmaps(beatmaps []int) *BeatmapsRequest {
 	return &BeatmapsRequest{client: c, Beatmaps: beatmaps}
 }
@@ -242,7 +238,6 @@ type BeatmapRequest struct {
 }
 
 // GetBeatmap returns beatmap data for the specified beatmap ID.
-// https://osu.ppy.sh/docs/index.html#get-beatmaps
 func (c *Client) GetBeatmap(beatmap int) *BeatmapRequest {
 	return &BeatmapRequest{client: c, Beatmap: beatmap}
 }
@@ -268,7 +263,6 @@ type LookupBeatmapRequest struct {
 }
 
 // LookupBeatmap returns beatmap.
-// https://osu.ppy.sh/docs/index.html#beatmaps
 func (c *Client) LookupBeatmap() *LookupBeatmapRequest {
 	return &LookupBeatmapRequest{client: c}
 }
@@ -353,7 +347,6 @@ type BeatmapAttributesRequest struct {
 }
 
 // GetBeatmapAttributes returns difficulty attributes of beatmap with specific mode and mods combination.
-// https://osu.ppy.sh/docs/index.html#get-beatmap-attributes
 func (c *Client) GetBeatmapAttributes(beatmap int) *BeatmapAttributesRequest {
 	return &BeatmapAttributesRequest{client: c, Beatmap: beatmap}
 }
@@ -412,8 +405,6 @@ func (r *BeatmapAttributesRequest) Build() (*BaseDifficultyAttributes, error) {
 	if err != nil {
 		return nil, err
 	}
-
-	println(resp.String())
 
 	return &result, nil
 }
