@@ -126,6 +126,7 @@ type DiscussionPostsRequest struct {
 	User                   *int
 }
 
+// GetDiscussionPosts returns the posts of beatmapset discussions.
 func (c *Client) GetDiscussionPosts() *DiscussionPostsRequest {
 	return &DiscussionPostsRequest{
 		DiscussionBaseRequest: DiscussionBaseRequest{client: c},
@@ -212,6 +213,7 @@ type DiscussionVotesRequest struct {
 	User                   *int                     `json:"user"`
 }
 
+// GetDiscussionVotes returns the votes given to beatmapset discussions.
 func (c *Client) GetDiscussionVotes() *DiscussionVotesRequest {
 	return &DiscussionVotesRequest{
 		DiscussionBaseRequest: DiscussionBaseRequest{client: c},
@@ -302,6 +304,7 @@ type DiscussionsRequest struct {
 	User             *int          `json:"user"`
 }
 
+// GetDiscussions returns a list of beatmapset discussions.
 func (c *Client) GetDiscussions() *DiscussionsRequest {
 	return &DiscussionsRequest{
 		DiscussionBaseRequest: DiscussionBaseRequest{client: c},

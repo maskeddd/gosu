@@ -29,10 +29,6 @@ type ScoreStatistics struct {
 	CountMiss int `json:"count_miss"`
 }
 
-type Scores struct {
-	Scores []Score `json:"scores"`
-}
-
 type ScoreWeight struct {
 	Percentage float32 `json:"percentage"`
 	PP         float32 `json:"pp"`

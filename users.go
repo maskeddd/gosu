@@ -64,22 +64,6 @@ type UserCompact struct {
 	Username      string     `json:"username"`
 }
 
-type Cover struct {
-	CustomURL *string `json:"custom_url"`
-	URL       string  `json:"url"`
-	ID        *string `json:"id"`
-}
-
-type Country struct {
-	Code string `json:"code"`
-	Name string `json:"name"`
-}
-
-type UserKudosu struct {
-	Available int `json:"available"`
-	Total     int `json:"total"`
-}
-
 type User struct {
 	UserCompact
 	Country      Country       `json:"country"`
@@ -101,6 +85,50 @@ type User struct {
 	TitleURL     *string       `json:"title_url"`
 	Twitter      *string       `json:"twitter"`
 	Website      *string       `json:"website"`
+}
+
+type UserExtended struct {
+	User
+	AccountHistory           []UserAccountHistory        `json:"account_history"`
+	ActiveTournamentBanner   *UserActiveTournamentBanner `json:"active_tournament_banner"`
+	Badges                   []UserBadge                 `json:"badges"`
+	BeatmapPlaycountsCount   int                         `json:"beatmap_playcounts_count"`
+	FavouriteBeatmapsetCount int                         `json:"favourite_beatmapset_count"`
+	FollowerCount            int                         `json:"follower_count"`
+	GraveyardBeatmapsetCount int                         `json:"graveyard_beatmapset_count"`
+	Groups                   []UserGroup                 `json:"groups"`
+	LovedBeatmapsetCount     int                         `json:"loved_beatmapset_count"`
+	MappingFollowerCount     int                         `json:"mapping_follower_count"`
+	MonthlyPlaycounts        []MonthlyPlaycount          `json:"monthly_playcounts"`
+	Page                     Page                        `json:"page"`
+	PendingBeatmapsetCount   int                         `json:"pending_beatmapset_count"`
+	PreviousUsernames        []string                    `json:"previous_usernames"`
+	RankHighest              *RankHighest                `json:"rank_highest"`
+	RankHistory              RankHistory                 `json:"rank_history"`
+	RankedBeatmapsetCount    int                         `json:"ranked_beatmapset_count"`
+	ReplaysWatchedCounts     []MonthlyPlaycount          `json:"replays_watched_counts"`
+	ScoresBestCount          int                         `json:"scores_best_count"`
+	ScoresFirstCount         int                         `json:"scores_first_count"`
+	ScoresRecentCount        int                         `json:"scores_recent_count"`
+	Statistics               UserStatistics              `json:"statistics"`
+	SupportLevel             int                         `json:"support_level"`
+	UserAchievements         []UserAchievement           `json:"user_achievements"`
+}
+
+type Cover struct {
+	CustomURL *string `json:"custom_url"`
+	URL       string  `json:"url"`
+	ID        *string `json:"id"`
+}
+
+type Country struct {
+	Code string `json:"code"`
+	Name string `json:"name"`
+}
+
+type UserKudosu struct {
+	Available int `json:"available"`
+	Total     int `json:"total"`
 }
 
 type UserAccountHistory struct {
@@ -200,34 +228,6 @@ type UserAchievement struct {
 	AchievementID int       `json:"achievement_id"`
 }
 
-type UserExtended struct {
-	User
-	AccountHistory           []UserAccountHistory        `json:"account_history"`
-	ActiveTournamentBanner   *UserActiveTournamentBanner `json:"active_tournament_banner"`
-	Badges                   []UserBadge                 `json:"badges"`
-	BeatmapPlaycountsCount   int                         `json:"beatmap_playcounts_count"`
-	FavouriteBeatmapsetCount int                         `json:"favourite_beatmapset_count"`
-	FollowerCount            int                         `json:"follower_count"`
-	GraveyardBeatmapsetCount int                         `json:"graveyard_beatmapset_count"`
-	Groups                   []UserGroup                 `json:"groups"`
-	LovedBeatmapsetCount     int                         `json:"loved_beatmapset_count"`
-	MappingFollowerCount     int                         `json:"mapping_follower_count"`
-	MonthlyPlaycounts        []MonthlyPlaycount          `json:"monthly_playcounts"`
-	Page                     Page                        `json:"page"`
-	PendingBeatmapsetCount   int                         `json:"pending_beatmapset_count"`
-	PreviousUsernames        []string                    `json:"previous_usernames"`
-	RankHighest              *RankHighest                `json:"rank_highest"`
-	RankHistory              RankHistory                 `json:"rank_history"`
-	RankedBeatmapsetCount    int                         `json:"ranked_beatmapset_count"`
-	ReplaysWatchedCounts     []MonthlyPlaycount          `json:"replays_watched_counts"`
-	ScoresBestCount          int                         `json:"scores_best_count"`
-	ScoresFirstCount         int                         `json:"scores_first_count"`
-	ScoresRecentCount        int                         `json:"scores_recent_count"`
-	Statistics               UserStatistics              `json:"statistics"`
-	SupportLevel             int                         `json:"support_level"`
-	UserAchievements         []UserAchievement           `json:"user_achievements"`
-}
-
 type Medal struct {
 	Description  string   `json:"description"`
 	Grouping     string   `json:"grouping"`
@@ -278,21 +278,23 @@ type OwnDataResponse struct {
 	StatisticsRulesets StatisticsRulesets `json:"statistics_rulesets"`
 }
 
-type GetOwnDataRequest struct {
+type OwnDataRequest struct {
 	client *Client
 	Mode   *Ruleset
 }
 
-func (c *Client) GetOwnData() *GetOwnDataRequest {
-	return &GetOwnDataRequest{client: c}
+// GetOwnData is similar to GetUser, but with the authenticated user (token owner) as user id.
+// Requires Authorization Code Grant authentication.
+func (c *Client) GetOwnData() *OwnDataRequest {
+	return &OwnDataRequest{client: c}
 }
 
-func (r *GetOwnDataRequest) SetMode(mode Ruleset) *GetOwnDataRequest {
+func (r *OwnDataRequest) SetMode(mode Ruleset) *OwnDataRequest {
 	r.Mode = &mode
 	return r
 }
 
-func (r *GetOwnDataRequest) Build() (*OwnDataResponse, error) {
+func (r *OwnDataRequest) Build() (*OwnDataResponse, error) {
 	req := r.client.httpClient.R().SetResult(&OwnDataResponse{})
 
 	if r.Mode != nil {
@@ -314,6 +316,7 @@ type UserKudosuRequest struct {
 	Offset *int
 }
 
+// GetUserKudosu returns the kudosu history of a user.
 func (c *Client) GetUserKudosu(user int) *UserKudosuRequest {
 	return &UserKudosuRequest{client: c, User: user}
 }
@@ -359,6 +362,7 @@ type UserScoresRequest struct {
 	Offset       *int
 }
 
+// GetUserScores returns the scores of a user.
 func (c *Client) GetUserScores(user int) *UserScoresRequest {
 	return &UserScoresRequest{client: c, User: user}
 }
@@ -438,7 +442,7 @@ func (r *UserScoresRequest) Build() (*[]UserScore, error) {
 	return resp.Result().(*[]UserScore), nil
 }
 
-type UserBeatmapsetsRequest struct {
+type UserBeatmapsRequest struct {
 	client  *Client
 	User    int
 	MapType string
@@ -446,55 +450,35 @@ type UserBeatmapsetsRequest struct {
 	Offset  *int
 }
 
-func (c *Client) GetUserBeatmapsets(user int) *UserBeatmapsetsRequest {
-	return &UserBeatmapsetsRequest{client: c, User: user, MapType: "ranked"}
-}
+// GetUserBeatmaps returns the beatmaps of a user.
+func (c *Client) GetUserBeatmaps(user int, mapType RankStatus) *UserBeatmapsRequest {
+	var maptype string
 
-func (r *UserBeatmapsetsRequest) SetStatus(mapType RankStatus) *UserBeatmapsetsRequest {
 	switch mapType {
 	case RankStatusApproved, RankStatusRanked:
-		r.MapType = "ranked"
+		maptype = "ranked"
 	case RankStatusGraveyard:
-		r.MapType = "graveyard"
+		maptype = "graveyard"
 	case RankStatusPending, RankStatusWIP, RankStatusQualified:
-		r.MapType = "pending"
+		maptype = "pending"
 	case RankStatusLoved:
-		r.MapType = "loved"
+		maptype = "loved"
 	}
-	return r
+
+	return &UserBeatmapsRequest{client: c, User: user, MapType: maptype}
 }
 
-func (r *UserBeatmapsetsRequest) Ranked() *UserBeatmapsetsRequest {
-	r.MapType = "ranked"
-	return r
-}
-
-func (r *UserBeatmapsetsRequest) Loved() *UserBeatmapsetsRequest {
-	r.MapType = "loved"
-	return r
-}
-
-func (r *UserBeatmapsetsRequest) Pending() *UserBeatmapsetsRequest {
-	r.MapType = "pending"
-	return r
-}
-
-func (r *UserBeatmapsetsRequest) Graveyard() *UserBeatmapsetsRequest {
-	r.MapType = "graveyard"
-	return r
-}
-
-func (r *UserBeatmapsetsRequest) SetLimit(limit int) *UserBeatmapsetsRequest {
+func (r *UserBeatmapsRequest) SetLimit(limit int) *UserBeatmapsRequest {
 	r.Limit = &limit
 	return r
 }
 
-func (r *UserBeatmapsetsRequest) SetOffset(offset int) *UserBeatmapsetsRequest {
+func (r *UserBeatmapsRequest) SetOffset(offset int) *UserBeatmapsRequest {
 	r.Offset = &offset
 	return r
 }
 
-func (r *UserBeatmapsetsRequest) Build() (*[]UserBeatmapset, error) {
+func (r *UserBeatmapsRequest) Build() (*[]UserBeatmapset, error) {
 	req := r.client.httpClient.R().SetResult(&[]UserBeatmapset{})
 
 	req.SetPathParams(map[string]string{
@@ -526,6 +510,7 @@ type UserMostPlayedRequest struct {
 	Offset *int
 }
 
+// GetUserMostPlayed returns a user's most played beatmaps.
 func (c *Client) GetUserMostPlayed(user int) *UserMostPlayedRequest {
 	return &UserMostPlayedRequest{client: c, User: user}
 }
@@ -540,8 +525,8 @@ func (r *UserMostPlayedRequest) SetOffset(offset int) *UserMostPlayedRequest {
 	return r
 }
 
-func (r *UserMostPlayedRequest) Build() (*[]GetUserMostPlayedResponse, error) {
-	req := r.client.httpClient.R().SetResult(&[]GetUserMostPlayedResponse{})
+func (r *UserMostPlayedRequest) Build() (*[]UserMostPlayedResponse, error) {
+	req := r.client.httpClient.R().SetResult(&[]UserMostPlayedResponse{})
 
 	req.SetPathParams(map[string]string{
 		"user": strconv.Itoa(r.User),
@@ -561,7 +546,7 @@ func (r *UserMostPlayedRequest) Build() (*[]GetUserMostPlayedResponse, error) {
 		return nil, err
 	}
 
-	return resp.Result().(*[]GetUserMostPlayedResponse), nil
+	return resp.Result().(*[]UserMostPlayedResponse), nil
 }
 
 type UserRecentActivityRequest struct {
@@ -571,6 +556,7 @@ type UserRecentActivityRequest struct {
 	Offset *int
 }
 
+// GetUserRecentActivity returns the recent activity of a user.
 func (c *Client) GetUserRecentActivity(user int) *UserRecentActivityRequest {
 	return &UserRecentActivityRequest{client: c, User: user}
 }
@@ -631,6 +617,7 @@ type UserRequest struct {
 	Mode   *Ruleset
 }
 
+// GetUser returns the details of a user.
 func (c *Client) GetUser(user string) *UserRequest {
 	return &UserRequest{client: c, User: user}
 }
@@ -663,6 +650,7 @@ type UsersRequest struct {
 	Users  []int
 }
 
+// GetUsers returns a list of users.
 func (c *Client) GetUsers(userIds []int) *UsersRequest {
 	return &UsersRequest{client: c, Users: userIds}
 }

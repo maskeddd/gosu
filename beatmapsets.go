@@ -185,6 +185,7 @@ type BeatmapsetWithIDRequest struct {
 	BeatmapsetID int
 }
 
+// GetBeatmapsetWithID returns a beatmapset, using its ID.
 func (c *Client) GetBeatmapsetWithID(beatmapsetID int) *BeatmapsetWithIDRequest {
 	return &BeatmapsetWithIDRequest{client: c, BeatmapsetID: beatmapsetID}
 }
@@ -220,6 +221,7 @@ type BeatmapsetWithSearchRequest struct {
 	Cursor     *Cursor
 }
 
+// GetBeatmapsetWithSearch returns a beatmapset, using a search query.
 func (c *Client) GetBeatmapsetWithSearch() *BeatmapsetWithSearchRequest {
 	return &BeatmapsetWithSearchRequest{client: c}
 }

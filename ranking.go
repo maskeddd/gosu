@@ -79,6 +79,7 @@ type Spotlights struct {
 	Spotlights []Spotlight `json:"spotlights"`
 }
 
+// GetKudosuRanking returns the kudosu ranking.
 func (c *Client) GetKudosuRanking() *KudosuRankingRequest {
 	return &KudosuRankingRequest{
 		client: c,
@@ -115,6 +116,7 @@ type RankingRequest struct {
 	Variant   *RankingVariant
 }
 
+// GetRanking returns the current ranking for the specified type and game mode.
 func (c *Client) GetRanking(mode Ruleset, rankingType RankingType) *RankingRequest {
 	return &RankingRequest{
 		client: c,
@@ -177,6 +179,7 @@ type SpotlightsRequest struct {
 	client *Client
 }
 
+// GetSpotlights returns the list of spotlights.
 func (c *Client) GetSpotlights() *SpotlightsRequest {
 	return &SpotlightsRequest{client: c}
 }

@@ -17,6 +17,7 @@ type WikiPageRequest struct {
 	Path   string
 }
 
+// GetWikiPage retyrns a page from the wiki.
 func (c *Client) GetWikiPage(locale string, path string) *WikiPageRequest {
 	return &WikiPageRequest{client: c, Locale: locale, Path: path}
 }

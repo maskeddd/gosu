@@ -12,6 +12,7 @@ type Client struct {
 	httpClient *resty.Client
 }
 
+// NewClient creates a gosu client with client credentials.
 func NewClient(clientID int, clientSecret string) (*Client, error) {
 	client := &Client{}
 
