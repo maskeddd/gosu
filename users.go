@@ -90,7 +90,7 @@ type User struct {
 type UserExtended struct {
 	User
 	AccountHistory           []UserAccountHistory        `json:"account_history"`
-	ActiveTournamentBanner   *UserActiveTournamentBanner `json:"active_tournament_banner"`
+	ActiveTournamentBanner   *UserActiveTournamentBanner `json:"active_tournament_banners"`
 	Badges                   []UserBadge                 `json:"badges"`
 	BeatmapPlaycountsCount   int                         `json:"beatmap_playcounts_count"`
 	FavouriteBeatmapsetCount int                         `json:"favourite_beatmapset_count"`
@@ -233,10 +233,10 @@ type Medal struct {
 	Grouping     string   `json:"grouping"`
 	IconURL      string   `json:"icon_url"`
 	Instructions string   `json:"instructions"`
-	MedalID      uint32   `json:"id"`
+	MedalID      int      `json:"id"`
 	Mode         *Ruleset `json:"mode"`
 	Name         string   `json:"name"`
-	Ordering     uint32   `json:"ordering"`
+	Ordering     int      `json:"ordering"`
 	Slug         string   `json:"slug"`
 }
 

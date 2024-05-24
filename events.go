@@ -39,7 +39,7 @@ type EventBeatmapset struct {
 
 type BeatmapPlaycountEvent struct {
 	Beatmap EventBeatmap `json:"beatmap"`
-	Count   uint32       `json:"count"`
+	Count   int          `json:"count"`
 }
 
 type BeatmapsetApproveEvent struct {
@@ -74,7 +74,7 @@ type MedalEvent struct {
 
 type RankEvent struct {
 	Grade   Grade        `json:"scoreRank"`
-	Rank    uint32       `json:"rank"`
+	Rank    int          `json:"rank"`
 	Mode    Ruleset      `json:"mode"`
 	Beatmap EventBeatmap `json:"beatmap"`
 	User    EventUser    `json:"user"`
