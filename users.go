@@ -90,7 +90,7 @@ type User struct {
 type UserExtended struct {
 	User
 	AccountHistory           []UserAccountHistory        `json:"account_history"`
-	ActiveTournamentBanner   *UserActiveTournamentBanner `json:"active_tournament_banners"`
+	ActiveTournamentBanner   *UserActiveTournamentBanner `json:"active_tournament_banner"`
 	Badges                   []UserBadge                 `json:"badges"`
 	BeatmapPlaycountsCount   int                         `json:"beatmap_playcounts_count"`
 	FavouriteBeatmapsetCount int                         `json:"favourite_beatmapset_count"`
